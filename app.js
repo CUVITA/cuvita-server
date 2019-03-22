@@ -3,9 +3,9 @@
  * @package express - CC BY-SA 3.0 US - expressjs.com
  * @package mongodb - Apache License 2.0 - npmjs.com/package/mongodb
  */
+const path = require('path');
 const https = require('https');
 const express = require('express');
-const credentials = require('./ssl');
 
 /**
  * CUVita Server Side Implementations - Main Thread
@@ -16,6 +16,11 @@ const credentials = require('./ssl');
 
 const app = express();
 
-https.createServer(credentials, app).listen(443, () =>
+https.createServer(require('./ssl'), app).listen(443, () =>
   console.log(`Application started at ${new Date().toUTCString()}`)
+);
+
+app.set('view engine', 'pug');
+app.get('/', (req, res) =>
+  res.render(path.join(__dirname, 'web', 'index'), require(path.join(__dirname, 'web', 'pugconfig.json')))
 );

@@ -22,5 +22,9 @@ https.createServer(require('./ssl'), app).listen(443, () =>
 
 app.set('view engine', 'pug');
 app.get('/', (req, res) =>
-  res.render(path.join(__dirname, 'web', 'index'), require(path.join(__dirname, 'web', 'pugconfig.json')))
+  res.render(path.join(__dirname, 'web', 'index'),
+  require(path.join(__dirname, 'web', 'pugconfig.json')))
 );
+
+app.use('/dispatch', require('./service_modules/dispatch'));
+app.use('/feed', require('./service_modules/feed'));

@@ -32,7 +32,7 @@ async function find(collection, querySelector, queryProjections) {
 async function findOne(collection, querySelector, queryProjections) {
   try {
     db = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true });
-    data = await db.db(DATABASE_NAME).collection(collection).findOne(querySelector, queryProjections);
+    data = await db.db(DATABASE_NAME).collection(collection).findOne(querySelector, { projection: { ...queryProjections } });
     return data;
   } catch (e) {
     throw Error(e);

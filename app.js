@@ -16,9 +16,10 @@ const express = require('express');
 
 const app = express();
 
-https.createServer(require('./ssl'), app).listen(443, () =>
-  console.log(`Application started at ${new Date().toUTCString()}`)
-);
+https.createServer(require('./ssl'), app).listen(443, () => {
+  //console.log('CUVITA SERVER MODULES VERSION 0.1.5');
+  console.log(`Application started at ${new Date().toUTCString()}`);
+});
 
 app.set('view engine', 'pug');
 app.get('/', (req, res) =>
@@ -28,3 +29,4 @@ app.get('/', (req, res) =>
 
 app.use('/dispatch', require('./service_modules/dispatch'));
 app.use('/feed', require('./service_modules/feed'));
+app.use('/article', require('./service_modules/article'));

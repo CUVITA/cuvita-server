@@ -17,40 +17,20 @@ const REALM_SEARCH = 'search';
 const REALM_RECOMMENDATION = 'recommendation';
 
 router.get('/fetchBanner', async (req, res) => {
-  try {
-    res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_BANNER })).content)
-  } catch (e) {
-    console.error(e);
-    res.sendStatus(400);
-  }
+  return res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_BANNER })).content)
 })
 
 router.get('/fetchSearch', async (req, res) => {
-  try {
-    res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_SEARCH })).content)
-  } catch (e) {
-    console.error(e);
-    res.sendStatus(400);
-  }
+  return res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_SEARCH })).content)
 })
 
 router.get('/fetchRecommendation', async (req, res) => {
-  try {
-    res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_RECOMMENDATION })).content)
-  } catch (e) {
-    console.error(e);
-    res.sendStatus(400);
-  }
+  return res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_RECOMMENDATION })).content)
 })
 
 router.get('/fetchArticles', async (req, res) => {
-  try {
-    res.json({ "title":{"zh_CN":"为你推荐","en_US":"top stories"},"action":{"description":{"zh_CN":"查看更多","en_US":"MORE"},"url":""}, "articles":
+  return res.json({ "title":{"zh_CN":"为你推荐","en_US":"top stories"},"action":{"description":{"zh_CN":"查看更多","en_US":"MORE"},"url":""}, "articles":
     (await db.find(COLLECTION_NAME_ARTICLE, { "role": "article" }, { "title": 1, "description": 1, "thumbnail": 1})).slice(0, 6) })
-  } catch (e) {
-    console.error(e);
-    res.sendStatus(400);
-  }
 })
 
 module.exports = router;

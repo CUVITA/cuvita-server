@@ -22,12 +22,17 @@ https.createServer(require('./ssl'), app).listen(443, () => {
 });
 
 app.set('view engine', 'pug');
-app.get('/', (req, res) =>
-  res.render(path.join(__dirname, 'web', 'index'),
+app.get('/', (req, res) => {
+  return res.render(path.join(__dirname, 'web', 'index'),
   require(path.join(__dirname, 'web', 'pugconfig.json')))
-);
+});
 
 app.use('/dispatch', require('./service_modules/dispatch'));
 app.use('/feed', require('./service_modules/feed'));
 app.use('/article', require('./service_modules/article'));
 app.use('/vendor', require('./service_modules/vendor'));
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.sendStatus(500);
+})

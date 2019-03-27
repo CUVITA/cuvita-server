@@ -13,10 +13,9 @@ const db = require('../db');
 //const COLLECTION_NAME_CONTENT = 'content';
 const COLLECTION_NAME_ARTICLE = 'article';
 
-router.get('/fetchDetail', async ({ query }, res) => {
-  if (!query.id)
+router.get('/fetchDetail', async ({ query: { id } }, res) => {
+  if (!id)
     return res.sendStatus(400)
-  let { id } = query;
   return res.json(await db.findOne(COLLECTION_NAME_ARTICLE, { "_id": db.ObjectId(id) }))
 })
 

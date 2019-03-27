@@ -31,6 +31,7 @@ app.use('/dispatch', require('./service_modules/dispatch'));
 app.use('/feed', require('./service_modules/feed'));
 app.use('/article', require('./service_modules/article'));
 app.use('/vendor', require('./service_modules/vendor'));
+app.use('/member', require('./service_modules/member'));
 
 app.use((err, req, res, next) => {
   console.error(err);

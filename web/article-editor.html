@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="py-5">
+    <div class="container h-100">
+      <div class="row h-100">
+        <div class="col-md-6 h-100">
+          <div id="editor">
+            <p>Hello World!</p>
+            <p>Some initial <strong>bold</strong> text</p>
+            <p><br></p>
+          </div>
+        </div>
+        <div class="col-md-6 h-100">
+          <pre><code class="html" id="display"></code></pre>
+          <button id="export">导出节点树</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+  <script src='http://lovasoa.github.io/tidy-html5/tidy.js'></script>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.9.0/beautify-html.min.js"></script>
+  <script>
+    function escapeHTML(unsafe) {
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeJSON(unsafe) {
+      return unsafe
+        .replace(/[\\]/g, '\\\\')
+        .replace(/[\"]/g, '\\\"')
+        .replace(/[\/]/g, '\\/')
+        .replace(/[\b]/g, '\\b')
+        .replace(/[\f]/g, '\\f')
+        .replace(/[\n]/g, '\\n')
+        .replace(/[\r]/g, '\\r')
+        .replace(/[\t]/g, '\\t');
+    };
+
+    function render() {
+      $('#display').html(escapeHTML(html_beautify($(quill.root).html())));
+      hljs.highlightBlock(document.querySelector('pre code'));
+    }
+
+    function imageHandler() {
+      let range = quill.getSelection();
+      let value = prompt('What is the image URL');
+      quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+    }
+  </script>
+  <script>
+    $('document').ready(() => {
+      render();
+      $('#export').click(() => {
+        let result = "";
+        $.each($($.parseHTML($(quill.root).html())), (i, el) => {
+          if ($(el)[0].nodeName.toLowerCase() === 'p') {
+            if (!!$(el)[0].firstElementChild && $(el)[0].firstElementChild.nodeName.toLowerCase() === 'img') {
+              $($(el)[0].children[0]).addClass('article-image');
+              result += $(el)[0].outerHTML;
+              return true;
+            }
+          }
+          switch ($(el)[0].nodeName.toLowerCase()) {
+            case 'p':
+              $(el).addClass('article-paragraph');
+              break;
+            case 'h2':
+              $(el).addClass('article-header');
+              break;
+            case 'img':
+              $(el).addClass('article-image');
+              break;
+            case 'ul':
+              $(el).addClass('article-list');
+          }
+          result += $(el)[0].outerHTML
+        });
+        navigator.clipboard.writeText(escapeJSON(result)).then(() => alert('已复制到剪贴板'))
+      });
+    });
+  </script>
+  <script>
+    var quill = new Quill('#editor', {
+      debug: 'info',
+      placeholder: 'Compose an epic...',
+      theme: 'snow',
+      formats: ['bold', 'color', 'italic', 'strike', 'script', 'underline', 'image', 'header', 'list', 'align'],
+      modules: {
+        toolbar: {
+          container: [
+            [{
+                header: [2, false]
+              },
+              {
+                align: ''
+              }, {
+                align: 'center'
+              }, {
+                align: 'right'
+              },
+            ],
+            ['bold', 'italic', 'underline'],
+            ['image', 'code-block']
+          ],
+          handlers: {
+            image: imageHandler
+          }
+        }
+      },
+    });
+    quill.on('text-change', (delta, oldDelta, source) => {
+      render();
+    });
+  </script>
+</body>
+
+</html>

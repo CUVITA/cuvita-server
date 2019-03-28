@@ -24,7 +24,8 @@ router.get('/fetchList', async (req, res) => {
 })
 
 router.get('/editor', async (req, res) => {
-  return res.sendFile(path.join(__dirname, '..', 'web', 'article-editor.html'))
+  return res.render(path.join(__dirname, '..', 'web', 'article-editor'),
+  { ...require(path.join(__dirname, '..', 'web', 'pugconfig.json')), title: 'CUVita - 文章编辑器' })
 })
 
 module.exports = router;

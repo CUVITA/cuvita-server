@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title #{title}
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', type='text/css')
+    link(rel='stylesheet', href=cdn+'/stylesheets/vitae.css')
+  body
+    .py-5.text-center.h-100(style="background-image: url('https://static.pingendo.com/cover-bubble-dark.svg');background-size:cover;")
+      .container.h-100.d-flex.flex-column.justify-content-center
+        .row
+          .mx-auto.col-md-6.col-10.bg-white.p-5
+            h1.mb-4 Log in
+            form(action='/login', method='post')
+              .form-group
+                input#vendorid.form-control(type='text', placeholder='Operator/Vendor ID', name='vendorid')
+              .form-group.mb-3
+                input#password.form-control(type='password', placeholder='Password', name='password')
+              button.btn.btn-primary(type='submit') Submit
+    script(src='https://code.jquery.com/jquery-3.3.1.min.js', integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=', crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js', integrity='sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut', crossorigin='anonymous')
+    script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM', crossorigin='anonymous')

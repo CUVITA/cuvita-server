@@ -16,10 +16,13 @@ const DATABASE_NAME = 'cuvita';
 /**
  * @see https://docs.mongodb.com/manual/reference/method/db.collection.find/
  */
-async function find(collection, querySelector, queryProjections) {
+async function find(collection, querySelector, queryProjections, querySort) {
   try {
     db = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true });
-    data = await db.db(DATABASE_NAME).collection(collection).find(querySelector).project(queryProjections).toArray();
+    if (!querySort)
+      data = await db.db(DATABASE_NAME).collection(collection).find(querySelector).project(queryProjections).toArray();
+    else
+      data = await db.db(DATABASE_NAME).collection(collection).find(querySelector).sort(querySort).project(queryProjections).toArray();
     return data;
   } catch (e) {
     throw Error(e);

@@ -12,26 +12,24 @@ const db = require('../db');
 
 const COLLECTION_NAME_VENDOR = 'vendor';
 
-router.get('/fetchList', async ({ query: { realm, categories } }, res) => {
-  if (!realm || !categories)
+router.get('/fetchList', async ({ query: { realm, category } }, res) => {
+  if (!realm || !category)
     return res.sendStatus(400);
-  let list = {};
-  for (let c of JSON.parse(categories)) {
-    list[c] = await db.find(COLLECTION_NAME_VENDOR, {
-      realm,
-      "category": c
-    }, {
-      "_id": 0,
-      "vendorid": 1,
-      "displayName": 1,
-      "description": 1,
-      "location": 1,
-      "rating": 1,
-      "tag": 1,
-      "thumbnail": 1
-    });
-  }
-  return res.json(list);
+  return res.json(await db.find(COLLECTION_NAME_VENDOR, {
+    realm,
+    category
+  }, {
+    "_id": 0,
+    "vendorid": 1,
+    "displayName": 1,
+    "description": 1,
+    "location": 1,
+    "rating": 1,
+    "tag": 1,
+    "thumbnail": 1
+  }, {
+    "rating": -1
+  }));
 });
 
 router.get('/fetchDetail', async ({ query: { vendorid }  }, res) => {

@@ -13,6 +13,7 @@ const db = require('../db');
 const COLLECTION_NAME_ENV = 'env';
 const COLLECTION_NAME_MEMBER = 'member';
 const COLLECTION_NAME_VENDOR = 'vendor';
+const TIER_LIMIT = 10;
 const AUTH_HEADER = 'X-CUVita-Name';
 
 
@@ -55,7 +56,7 @@ router.get('/authenticate', async({ query: { cardno }}, res) => {
 });
 
 router.get('/accredit', async({ query: { cardno }}, res) => {
-  let memberInfo = await db.findOne(COLLECTION_NAME_MEMBER, { cardno }, { "_id": 0, "cardno": 1, "name": 1 });
+  let memberInfo = await db.findOne(COLLECTION_NAME_MEMBER, { cardno }, { "_id": 0, "cardno": 1, "name": 1, "credit": 1 });
   if (!memberInfo)
     return res.render(path.join(__dirname, '..', 'web', 'portal'),
       {
@@ -68,15 +69,34 @@ router.get('/accredit', async({ query: { cardno }}, res) => {
   let transid = db.ObjectId();
   let { vendorid, weight } = vendor;
   await db.updateOne(COLLECTION_NAME_MEMBER, { cardno }, {
+    $inc: {
+      "credit.cumulative": 1
+    },
     $push: {
       'history': {
         'vendorid': vendorid,
         'time': Date.now(),
-        'accredited': weight
+        'accredited': weight.toFixed(2)
       }
     }
   });
-  let { name } = memberInfo;
+  let { name, credit } = memberInfo;
+  if (++credit.tier >= TIER_LIMIT)
+    await db.updateOne(COLLECTION_NAME_MEMBER, { cardno }, {
+      $inc: {
+        "credit.redeem": 1
+      },
+      $set: {
+        "credit.tier": 0
+      }
+    })
+  else {
+    await db.updateOne(COLLECTION_NAME_MEMBER, { cardno }, {
+      $inc: {
+        "credit.tier": 1
+      }
+    })
+  }
   return res.render(path.join(__dirname, '..', 'web', 'portal'),
     {
       ...require(path.join(__dirname, '..', 'web', 'pugconfig.json')),

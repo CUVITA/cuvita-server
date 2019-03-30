@@ -48,7 +48,7 @@ async function findOne(collection, querySelector, queryProjections) {
 async function updateOne(collection, querySelector, updateData) {
   try {
     db = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true });
-    result = await db.db(DATABASE_NAME).collection(collection).update(querySelector, updateData);
+    result = await db.db(DATABASE_NAME).collection(collection).updateOne(querySelector, updateData);
     return result;
   } catch (e) {
     throw Error(e);

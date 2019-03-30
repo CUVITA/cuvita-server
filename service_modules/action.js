@@ -13,9 +13,12 @@ const db = require('../db');
 const COLLECTION_NAME_ENV = 'env';
 const COLLECTION_NAME_MEMBER = 'member';
 const COLLECTION_NAME_VENDOR = 'vendor';
-const TIER_LIMIT = 10;
-const AUTH_HEADER = 'X-CUVita-Name';
-
+const {
+  AUTH_HEADER
+} = require(path.join(__dirname, 'config', 'actionconfig.json'));
+const {
+  CREDIT_POLICY
+} = require(path.join(__dirname, 'config', 'memberconfig.json'));
 
 router.use(async (req, res, next) => {
   let credentials = {
@@ -81,7 +84,7 @@ router.get('/accredit', async({ query: { cardno }}, res) => {
     }
   });
   let { name, credit } = memberInfo;
-  if (++credit.tier >= TIER_LIMIT)
+  if (++credit.tier >= CREDIT_POLICY.goal)
     await db.updateOne(COLLECTION_NAME_MEMBER, { cardno }, {
       $inc: {
         "credit.redeem": 1

@@ -11,7 +11,9 @@ const db = require('../db');
  */
 
 const COLLECTION_NAME_MEMBER = 'member';
-const CREDIT_POLICY = { goal: 10 };
+const {
+  CREDIT_POLICY
+} = require(path.join(__dirname, 'config', 'memberconfig.json'));
 
 router.get('/fetchInfo', async ({ query: { openid } }, res) => {
   if (!openid)

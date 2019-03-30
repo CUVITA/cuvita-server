@@ -21,9 +21,13 @@ http.createServer(app).listen(80, () => {
 });
 
 app.get('/qr', async ({ query: { p }}, res) => {
-  res.redirect(url(`/action/qr?cardno=${p}`));
+  if (!p)
+    return res.sendStatus(400);
+  return res.redirect(url(`/action/qr?cardno=${p}`));
 });
 
 app.get('/coupon', async ({ query: { p }}, res) => {
-  res.redirect(url(`/action/coupon?id=${p}`));
+  if (!p)
+    return res.sendStatus(400);
+  return res.redirect(url(`/action/coupon?id=${p}`));
 });

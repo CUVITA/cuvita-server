@@ -33,6 +33,7 @@ app.use('/article', require(path.join(__dirname, 'service_modules', 'article')))
 app.use('/vendor', require(path.join(__dirname, 'service_modules', 'vendor')));
 app.use('/member', require(path.join(__dirname, 'service_modules', 'member')));
 app.use('/action', require(path.join(__dirname, 'service_modules', 'action')));
+app.use('/arrival', require(path.join(__dirname, 'service_modules', 'arrival')));
 
 app.use((err, req, res, next) => {
   console.error(err);

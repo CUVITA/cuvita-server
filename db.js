@@ -45,7 +45,7 @@ async function findOne(collection, querySelector, queryProjections) {
 /**
  * @see https://docs.mongodb.com/manual/reference/method/db.collection.update/
  */
-async function update(collection, querySelector, updateData) {
+async function updateOne(collection, querySelector, updateData) {
   try {
     db = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true });
     result = await db.db(DATABASE_NAME).collection(collection).update(querySelector, updateData);
@@ -71,7 +71,7 @@ async function insert(collection, insertionData) {
 module.exports = {
   find,
   findOne,
-  update,
+  updateOne,
   insert,
   ObjectId
 }

@@ -12,6 +12,7 @@ const db = require('../db');
 
 const COLLECTION_NAME_ENV = 'env';
 const COLLECTION_NAME_MEMBER = 'member';
+const COLLECTION_NAME_VENDOR = 'vendor';
 const AUTH_HEADER = 'X-CUVita-Name';
 
 
@@ -37,21 +38,54 @@ router.use(async (req, res, next) => {
 });
 
 router.get('/qr', async(req, res, next) => {
+  let { query: { cardno } } = req;
+  if (!cardno)
+    return res.sendStatus(400);
   if (!!(await db.findOne(COLLECTION_NAME_ENV, {
     "role": "credentials",
     "realm": "associate"
   })).entries[res.locals[AUTH_HEADER]])
-    res.redirect('/authenticate');
+    res.redirect(`/action/authenticate?cardno=${cardno}`);
   else
-    res.redirect('/accredit');
+    res.redirect(`/action/accredit?cardno=${cardno}`);
 });
 
-router.get('/authenticate', async(req, res) => {
+router.get('/authenticate', async({ query: { cardno }}, res) => {
 
 });
 
-router.get('/accredit', async(req, res) => {
-
+router.get('/accredit', async({ query: { cardno }}, res) => {
+  let memberInfo = await db.findOne(COLLECTION_NAME_MEMBER, { cardno }, { "_id": 0, "cardno": 1, "name": 1 });
+  if (!memberInfo)
+    return res.render(path.join(__dirname, '..', 'web', 'portal'),
+      {
+        ...require(path.join(__dirname, '..', 'web', 'pugconfig.json')),
+        title: 'CUVita - Portal',
+        success: false
+      });
+  let portal = res.locals[AUTH_HEADER];
+  let vendor = await db.findOne(COLLECTION_NAME_VENDOR, { portal }, { "_id": 0, "vendorid": 1, "weight": 1 });
+  let transid = db.ObjectId();
+  let { vendorid, weight } = vendor;
+  await db.updateOne(COLLECTION_NAME_MEMBER, { cardno }, {
+    $push: {
+      'history': {
+        'vendorid': vendorid,
+        'time': Date.now(),
+        'accredited': weight
+      }
+    }
+  });
+  let { name } = memberInfo;
+  return res.render(path.join(__dirname, '..', 'web', 'portal'),
+    {
+      ...require(path.join(__dirname, '..', 'web', 'pugconfig.json')),
+      title: 'CUVita - Portal',
+      success: true,
+      cardno,
+      name,
+      transid
+    });
 });
 
 module.exports = router;

@@ -26,10 +26,6 @@ app.get('/', async (req, res) => {
   return res.render(path.join(__dirname, 'web', 'index'),
     require(path.join(__dirname, 'web', 'pugconfig.json')))
 });
-app.get('/portal', async (req, res) => {
-  return res.render(path.join(__dirname, 'web', 'portal'),
-    { ...require(path.join(__dirname, '..', 'web', 'pugconfig.json')), title: 'CUVita - Portal' });
-})
 
 app.use('/dispatch', require(path.join(__dirname, 'service_modules', 'dispatch')));
 app.use('/feed', require(path.join(__dirname, 'service_modules', 'feed')));

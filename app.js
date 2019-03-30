@@ -5,7 +5,7 @@
  */
 const path = require('path');
 const https = require('https');
-const express = require('express');
+const app = require('express')();
 
 /**
  * CUVita Server Side Implementations - Main Thread
@@ -14,10 +14,8 @@ const express = require('express');
  * @copyright  © CHINESE UNION 2019
  */
 
-const app = express();
-
 https.createServer(require('./ssl'), app).listen(443, () => {
-  //console.log('CUVITA SERVER MODULES VERSION 0.1.5');
+  console.log('=== CUVITA SERVER MODULES VERSION 0.1.5 ===');
   console.log(`Application started at ${new Date().toUTCString()}`);
 });
 
@@ -28,17 +26,9 @@ app.get('/', async (req, res) => {
   return res.render(path.join(__dirname, 'web', 'index'),
     require(path.join(__dirname, 'web', 'pugconfig.json')))
 });
-app.get('/login', async (req, res) => {
-  return res.render(path.join(__dirname, 'web', 'login'),
-    { ...require(path.join(__dirname, 'web', 'pugconfig.json')), title: 'CUVita - Login' });
-});
-app.post('/login', require(path.join(__dirname, 'service_modules', 'login')));
 app.get('/portal', async (req, res) => {
   return res.render(path.join(__dirname, 'web', 'portal'),
-    require({
-      ...path.join(__dirname, 'web', 'pugconfig.json'),
-      title: 'CUVita - Portal'
-    }))
+    { ...require(path.join(__dirname, '..', 'web', 'pugconfig.json')), title: 'CUVita - Portal' });
 })
 
 app.use('/dispatch', require(path.join(__dirname, 'service_modules', 'dispatch')));
@@ -46,6 +36,7 @@ app.use('/feed', require(path.join(__dirname, 'service_modules', 'feed')));
 app.use('/article', require(path.join(__dirname, 'service_modules', 'article')));
 app.use('/vendor', require(path.join(__dirname, 'service_modules', 'vendor')));
 app.use('/member', require(path.join(__dirname, 'service_modules', 'member')));
+app.use('/action', require(path.join(__dirname, 'service_modules', 'action')));
 
 app.use((err, req, res, next) => {
   console.error(err);

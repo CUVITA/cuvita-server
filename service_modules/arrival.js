@@ -15,14 +15,19 @@ const {
   FXML_USERNAME,
   FXML_APIKEY
 } = require(path.join(__dirname, 'config', 'fxmlconfig.json'));
+const COLLECTION_NAME_ARRIVAL_ENV = 'arrival-env';
 
 router.use(require('body-parser').json());
+
+router.get('/layout', async(req, res) => {
+  return res.json((await db.findOne(COLLECTION_NAME_ARRIVAL_ENV, { role: 'layoutConfiguration' }, { "_id": 0, "entries": 1 })).entries);
+})
 
 router.post('/pickup', async ({ body }, res) => {
 
 });
 
-router.get('/getFlightDetail', async ({ query :{ flight } }, res) => {
+router.get('/fetchFlightDetail', async ({ query :{ flight } }, res) => {
   if (!flight)
     return res.sendStatus(400);
   flight = flight.toUpperCase();

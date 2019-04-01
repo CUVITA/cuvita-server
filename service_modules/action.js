@@ -112,18 +112,3 @@ router.get('/accredit', async({ query: { cardno }}, res) => {
 });
 
 module.exports = router;
-
-/*
-{
-  users: {
-    ...(db.findOne(COLLECTION_NAME_ENV, {
-      "role": "credentials",
-      "realm": "associate"
-    })).entries,
-    ...(db.findOne(COLLECTION_NAME_ENV, {
-      "role": "credentials",
-      "realm": "vendor"
-    })).entries
-  }
-}
-*/

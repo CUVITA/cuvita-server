@@ -15,6 +15,8 @@ const {
   CREDIT_POLICY
 } = require(path.join(__dirname, 'config', 'memberconfig.json'));
 
+router.use(require('body-parser').json());
+
 router.get('/fetchInfo', async ({ query: { openid } }, res) => {
   if (!openid)
     return res.sendStatus(400);
@@ -82,6 +84,21 @@ router.get('/fetchCoupon', async ({ query: { openid } }, res) => {
     coupon[e] = { ...coupon[e], displayName, realm, thumbnail }
   }
   return res.json(await coupon);
+});
+
+router.post('/bind', async({ body: { cardno, name, openid } }, res) => {
+  if (!cardno || !name || !openid)
+    return res.sendStatus(400);
+  let memberInfo = await db.findOne(COLLECTION_NAME_MEMBER, { cardno, name }, { "_id": 0, "cardno": 1, "name": 1, "credit": 1 });
+  if (!memberInfo)
+    return res.sendStatus(404);
+  await db.updateOne(COLLECTION_NAME_MEMBER, { cardno, name }, {
+    $set: {
+      'openid': openid
+    }
+  });
+  memberInfo.credit = { ...memberInfo.credit, ...CREDIT_POLICY };
+  return res.json(memberInfo);
 });
 
 module.exports = router;

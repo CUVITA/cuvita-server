@@ -11,9 +11,12 @@ const db = require('../db');
  */
 
 const COLLECTION_NAME_MEMBER = 'member';
+const COLLECTION_NAME_ENV = 'env';
 const {
   CREDIT_POLICY
 } = require(path.join(__dirname, 'config', 'memberconfig.json'));
+
+const REGISTER_CACHE = {};
 
 router.use(require('body-parser').json());
 
@@ -100,5 +103,34 @@ router.post('/bind', async({ body: { cardno, name, openid } }, res) => {
   memberInfo.credit = { ...memberInfo.credit, ...CREDIT_POLICY };
   return res.json(memberInfo);
 });
+
+router.post('/register', async({ body }, res) => {
+  let { openid, procedure } = body;
+  if (!openid || !procedure)
+    return res.sendStatus(400);
+  switch (procedure) {
+    case 'handshake':
+      let { payload } = body
+      REGISTER_CACHE[openid] = { ...payload };
+      return res.json({
+        ...(await db.findOne(COLLECTION_NAME_ENV, {
+          "role": "scheme",
+          "realm": "memberRegistration"
+        }, {
+          "_id": 0,
+          "entries": 1
+        })).entries,
+        package: `prepay_id=`
+      });
+      break;
+    case 'prepay':
+      break;
+    case 'postpaid':
+      break
+    default:
+      return res.sendStatus(400);
+      break;
+  }
+})
 
 module.exports = router;

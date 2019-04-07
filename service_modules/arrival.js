@@ -55,7 +55,7 @@ router.get('/fetchFlightDetail', async ({ query :{ flight } }, res) => {
       howMany: 1
     }
   })).data.AirlineFlightSchedulesResult.data[0];
-  // res.json(flightInfo);
+  res.json(destination);
 
 })
 

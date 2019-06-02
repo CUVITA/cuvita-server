@@ -13,7 +13,8 @@ const { get } = require('axios');
 const {
   FXML_URL,
   FXML_USERNAME,
-  FXML_APIKEY
+  FXML_APIKEY,
+  FXML_HOWMANY
 } = require(path.join(__dirname, 'config', 'fxmlconfig.json'));
 const COLLECTION_NAME_ARRIVAL_ENV = 'arrival-env';
 
@@ -27,21 +28,32 @@ router.post('/pickup', async ({ body }, res) => {
 
 });
 
-router.get('/fetchFlightDetail', async ({ query :{ flight } }, res) => {
-  if (!flight)
+router.get('/fetchFlightDetail', async ({ query :{ flight, startDate } }, res) => {
+  if (!flight || !startDate)
     return res.sendStatus(400);
   flight = flight.toUpperCase();
   if (!flight.match(/[A-Z]{2,3}\d+/g))
     return res.sendStatus(400);
+  let endDate;
+  try {
+    startDate = new Date(parseInt(startDate));
+    endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 1);
+    startDate = startDate.getTime() / 1000;
+    endDate = endDate.getTime() / 1000;
+  } catch (e) {
+    console.error(e);
+    return res.sendStatus(400);
+  }
   let airline, flightno;
   airline = flight.match(/[A-Z]{2,3}/g)[0];
   flightno = flight.match(/\d+/g)[0];
   let {
-    actual_ident,
-    departuretime,
-    arrivaltime,
-    origin,
-    destination
+    data: {
+      AirlineFlightSchedulesResult: {
+        data
+      }
+    }
   } = (await get(FXML_URL, {
     auth: {
       username: FXML_USERNAME,
@@ -50,13 +62,12 @@ router.get('/fetchFlightDetail', async ({ query :{ flight } }, res) => {
     params: {
       airline,
       flightno,
-      startDate: 1554102000,
-      endDate: 1554188400,
-      howMany: 1
+      startDate,
+      endDate,
+      howMany: FXML_HOWMANY
     }
-  })).data.AirlineFlightSchedulesResult.data[0];
-  res.json(destination);
-
+  }));
+  res.json(data);
 })
 
 module.exports = router;

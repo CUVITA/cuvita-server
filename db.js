@@ -1,28 +1,27 @@
+const path = require('path');
+const { URL, NAME, COLLECTIONS } = require(path.join(__dirname, 'config', 'db.json'));
 const { MongoClient, ObjectId } = require('mongodb');
 
 /**
  * CUVita Server Side Implementations - Database CRUDs
- * @author relubwu
- * @version 0.1.5
- * @copyright  © CHINESE UNION 2019
+ * @version 0.1.6
  */
 
 /**
- * FIELD
- */
-const DATABASE_URL = 'mongodb://localhost:27017';
-const DATABASE_NAME = 'cuvita';
-
-/**
- * @see https://docs.mongodb.com/manual/reference/method/db.collection.find/
+ * [find description]
+ * @param  {[type]} collection       [description]
+ * @param  {[type]} querySelector    [description]
+ * @param  {[type]} queryProjections [description]
+ * @param  {[type]} querySort        [description]
+ * @return {[type]}                  [description]
  */
 async function find(collection, querySelector, queryProjections, querySort) {
   try {
-    db = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true });
+    db = await MongoClient.connect(URL, { useNewUrlParser: true });
     if (!querySort)
-      data = await db.db(DATABASE_NAME).collection(collection).find(querySelector).project(queryProjections).toArray();
+      data = await db.db(NAME).collection(collection).find(querySelector).project(queryProjections).toArray();
     else
-      data = await db.db(DATABASE_NAME).collection(collection).find(querySelector).sort(querySort).project(queryProjections).toArray();
+      data = await db.db(NAME).collection(collection).find(querySelector).sort(querySort).project(queryProjections).toArray();
     return data;
   } catch (e) {
     throw Error(e);
@@ -30,12 +29,16 @@ async function find(collection, querySelector, queryProjections, querySort) {
 }
 
 /**
- * @see https://docs.mongodb.com/manual/reference/method/db.collection.findOne/
+ * [findOne description]
+ * @param  {[type]} collection       [description]
+ * @param  {[type]} querySelector    [description]
+ * @param  {[type]} queryProjections [description]
+ * @return {[type]}                  [description]
  */
 async function findOne(collection, querySelector, queryProjections) {
   try {
-    db = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true });
-    data = await db.db(DATABASE_NAME).collection(collection).findOne(querySelector, { projection: { ...queryProjections } });
+    db = await MongoClient.connect(URL, { useNewUrlParser: true });
+    data = await db.db(NAME).collection(collection).findOne(querySelector, { projection: { ...queryProjections } });
     return data;
   } catch (e) {
     throw Error(e);
@@ -43,12 +46,16 @@ async function findOne(collection, querySelector, queryProjections) {
 }
 
 /**
- * @see https://docs.mongodb.com/manual/reference/method/db.collection.update/
+ * [updateOne description]
+ * @param  {[type]} collection    [description]
+ * @param  {[type]} querySelector [description]
+ * @param  {[type]} updateData    [description]
+ * @return {[type]}               [description]
  */
 async function updateOne(collection, querySelector, updateData) {
   try {
-    db = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true });
-    result = await db.db(DATABASE_NAME).collection(collection).updateOne(querySelector, updateData);
+    db = await MongoClient.connect(URL, { useNewUrlParser: true });
+    result = await db.db(NAME).collection(collection).updateOne(querySelector, updateData);
     return result;
   } catch (e) {
     throw Error(e);
@@ -56,22 +63,30 @@ async function updateOne(collection, querySelector, updateData) {
 }
 
 /**
- * @see https://docs.mongodb.com/manual/reference/method/db.collection.insert/
+ * [insert description]
+ * @param  {[type]} collection    [description]
+ * @param  {[type]} insertionData [description]
+ * @return {[type]}               [description]
  */
 async function insert(collection, insertionData) {
   try {
-    db = await MongoClient.connect(DATABASE_URL, { useNewUrlParser: true });
-    result = await db.db(DATABASE_NAME).collection(collection).insert(insertionData);
+    db = await MongoClient.connect(URL, { useNewUrlParser: true });
+    result = await db.db(NAME).collection(collection).insert(insertionData);
     return result;
   } catch (e) {
     throw Error(e);
   }
 }
 
+/**
+ * [exports description]
+ * @type {Object}
+ */
 module.exports = {
+  ObjectId,
   find,
   findOne,
   updateOne,
   insert,
-  ObjectId
+  COLLECTIONS
 }

@@ -1,26 +1,32 @@
 const path = require('path');
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
+const { APP_ID, APP_SECRET } = require(path.join(__dirname, '..', 'config', 'token.json'));
 const { get } = require('axios');
-const db = require('../db');
+require('log-timestamp');
 
 /**
- * CUVita Server Side Implementations - Dispatcher
- * @author relubwu
- * @version 0.1.5
- * @copyright  © CHINESE UNION 2019
+ * CUVita Server Side Implementations - 换取微信SSO凭据
+ * @version 0.1.6
  */
 
-const {
-  APP_ID,
-  APP_SECRET
-} = require(path.join(__dirname, 'config', 'dispatchconfig.json'));
-
+/**
+ * [query description]
+ * @type {Object}
+ */
 router.get('/', async ({ query: { code } }, res) => {
   if (!code)
-    res.sendStatus(400);
-  let { data: { openid, session_key } } = await get(`https://api.weixin.qq.com/sns/jscode2session?appid=${ APP_ID }&secret=${ APP_SECRET }&js_code=${ code }&grant_type=authorization_code`);
-  res.json({ openid, session_key });
+    return res.sendStatus(400);
+  try {
+    let { data: { openid, session_key } } = await get(`https://api.weixin.qq.com/sns/jscode2session?appid=${ APP_ID }&secret=${ APP_SECRET }&js_code=${ code }&grant_type=authorization_code`);
+    res.json({ openid, session_key });
+  } catch (e) {
+    console.log(e)
+    return res.sendStatus(500);
+  }
 });
 
+/**
+ * [exports description]
+ * @type {[type]}
+ */
 module.exports = router;

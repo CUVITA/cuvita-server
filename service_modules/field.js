@@ -9,13 +9,15 @@ const db = require('../db');
  * @copyright  © CHINESE UNION 2019
  */
 
-const COLLECTION_NAME_FEED = 'feed';
-//const COLLECTION_NAME_CONTENT = 'content';
-const COLLECTION_NAME_ARTICLE = 'article';
 const REALM_BANNER = 'banner';
 const REALM_SEARCH = 'search';
 const REALM_RECOMMENDATION = 'recommendation';
 
+router.get('/', async(req, res) => {
+
+})
+
+/*
 router.get('/fetchBanner', async (req, res) => {
   return res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_BANNER })).content)
 })
@@ -32,5 +34,6 @@ router.get('/fetchArticles', async (req, res) => {
   return res.json({ "title":{"zh_CN":"为你推荐","en_US":"top stories"},"action":{"description":{"zh_CN":"查看更多","en_US":"MORE"},"url":""}, "articles":
     (await db.find(COLLECTION_NAME_ARTICLE, { "role": "article" }, { "title": 1, "description": 1, "thumbnail": 1})).slice(0, 6) })
 })
+*/
 
 module.exports = router;

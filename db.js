@@ -63,12 +63,28 @@ async function updateOne(collection, querySelector, updateData) {
 }
 
 /**
- * [insert description]
+ * [insertOne description]
  * @param  {[type]} collection    [description]
  * @param  {[type]} insertionData [description]
  * @return {[type]}               [description]
  */
-async function insert(collection, insertionData) {
+async function insertOne(collection, insertionData) {
+  try {
+    db = await MongoClient.connect(URL, { useNewUrlParser: true });
+    result = await db.db(NAME).collection(collection).insert(insertionData);
+    return result;
+  } catch (e) {
+    throw Error(e);
+  }
+}
+
+/**
+ * [insertMany description]
+ * @param  {[type]} collection    [description]
+ * @param  {[type]} insertionData [description]
+ * @return {[type]}               [description]
+ */
+async function insertMany(collection, insertionData) {
   try {
     db = await MongoClient.connect(URL, { useNewUrlParser: true });
     result = await db.db(NAME).collection(collection).insert(insertionData);
@@ -87,6 +103,11 @@ module.exports = {
   find,
   findOne,
   updateOne,
-  insert,
-  COLLECTIONS
+  insertOne,
+  insertMany,
+  COLLECTIONS: {
+    BANNERS: "banners",
+    VENDORS: "vendors",
+    USERS: "users"
+  }
 }

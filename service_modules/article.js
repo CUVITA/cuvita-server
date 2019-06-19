@@ -23,9 +23,9 @@ router.get('/fetchList', async (req, res) => {
   return res.json(await db.find(COLLECTION_NAME_ARTICLE, {}, { "title": 1, "description": 1, "thumbnail": 1}))
 })
 
-router.get('/editor', async (req, res) => {
-  return res.render(path.join(__dirname, '..', 'web', 'article-editor'),
-  { ...require(path.join(__dirname, '..', 'web', 'pugconfig.json')), title: 'CUVita - 文章编辑器' })
-})
+// router.get('/editor', async (req, res) => {
+//   return res.render(path.join(__dirname, '..', 'web', 'article-editor'),
+//   { ...require(path.join(__dirname, '..', 'web', 'pugconfig.json')), title: 'CUVita - 文章编辑器' })
+// })
 
 module.exports = router;

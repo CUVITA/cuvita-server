@@ -19,7 +19,7 @@ const {
 const REGISTER_CACHE = {};
 
 router.use(require('body-parser').json());
-
+/*
 router.get('/fetchInfo', async ({ query: { openid } }, res) => {
   if (!openid)
     return res.sendStatus(400);
@@ -132,5 +132,20 @@ router.post('/register', async({ body }, res) => {
       break;
   }
 })
+*/
+
+
+router.get('/getInfo', async({ query: { openid } }, res) => {
+  if (!openid)
+    return res.sendStatus(400);
+
+  let info = await db.findOne(db.COLLECTIONS.MEMBERS, {openid: openid}, {"_id": 0, "openid": 0});
+  if (!info)
+    return res.sendStatus(404);
+  return res.json(info);
+});
+
+
+
 
 module.exports = router;

@@ -3,45 +3,49 @@ const router = express.Router();
 const db = require('../db');
 
 /**
-* CUVita Server Side Implementations - Feed Generator
-* @author relubwu
-* @version 0.1.5
-* @copyright  © CHINESE UNION 2019
-*/
+ * CUVita Server Side Implementations - Feed Generator
+ * @author relubwu
+ * @version 0.1.5
+ * @copyright  © CHINESE UNION 2019
+ */
 
-const COLLECTION_NAME_BANNERS = 'banners';
-const REALM_BANNER = 'banner';
-const REALM_SEARCH = 'search';
-const REALM_RECOMMENDATION = 'recommendation';
-
-router.get('/', async(req, res) => {
-  var resultArray =
-  res.json(await db.find(COLLECTION_NAME_BANNERS, {
-    req.locale
-  }, {
-    "_id": 0
+router.get('/', async({ query: { locale } }, res) => {
+  if (!locale)
+    return res.sendStatus(400);
+  let banners = await db.find("banners", { locale: parseInt(locale) }, {
+    "_id": 0,
+    "locale": 0
   });
-  
-  return resultArray[Math.floor(Math.random() * resultArray.length)];
+
+  let referenceList = await db.find(db.COLLECTIONS.RECOMMENDATIONS, {}, {"_id": 0,"locale": 0});
+
+  for (i=0; i<referenceList.length; i++) {
+    referenceList[i].title = referenceList[i].title[parseInt(locale)];
+    referenceList[i].action = referenceList[i].action[parseInt(locale)];
+    for(j=0; j<referenceList[i].items.length; j++) {
+      let itemObject = await db.findOne(db.COLLECTIONS.VENDORS,
+        { "reference": referenceList[i].items[j] },
+        {
+          "_id": 0,
+          "thumbnail": 1,
+          "name": 1,
+          "description" :1
+        });
+        itemObject.name = itemObject.name[parseInt(locale)];
+        itemObject.description = itemObject.description[parseInt(locale)];
+        itemObject["reference"] = referenceList[i].items[j];
+        referenceList[i].items[j] = itemObject;
+    }
+  }
+
+  let articleList = await db.find(db.COLLECTIONS.ARTICLES, {}, {"_id": 0});
+
+  return res.json({
+    banner: banners[Math.floor(Math.random() * banners.length)],
+    recommendations: [referenceList[Math.floor(Math.random() * referenceList.length)],
+           referenceList[Math.floor(Math.random() * referenceList.length)]],
+    article: articleList
+  });
 });
-
-/*
-router.get('/fetchBanner', async (req, res) => {
-return res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_BANNER })).content)
-})
-
-router.get('/fetchSearch', async (req, res) => {
-return res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_SEARCH })).content)
-})
-
-router.get('/fetchRecommendation', async (req, res) => {
-return res.json((await db.findOne(COLLECTION_NAME_FEED, { "realm": REALM_RECOMMENDATION })).content)
-})
-
-router.get('/fetchArticles', async (req, res) => {
-return res.json({ "title":{"zh_CN":"为你推荐","en_US":"top stories"},"action":{"description":{"zh_CN":"查看更多","en_US":"MORE"},"url":""}, "articles":
-(await db.find(COLLECTION_NAME_ARTICLE, { "role": "article" }, { "title": 1, "description": 1, "thumbnail": 1})).slice(0, 6) })
-})
-*/
 
 module.exports = router;

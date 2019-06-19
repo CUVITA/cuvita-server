@@ -16,10 +16,11 @@ const PORT = 8081;
 app.listen(PORT, () => console.log(`API started on port ${ PORT }`));
 
 app.use('/dispatch', require(path.join(__dirname, 'service_modules', 'dispatch')));
+app.use('/field', require(path.join(__dirname, 'service_modules', 'field')));
+app.use('/vendor', require(path.join(__dirname, 'service_modules', 'vendor')));
 // app.use('/feed', require(path.join(__dirname, 'service_modules', 'feed')));
 // app.use('/article', require(path.join(__dirname, 'service_modules', 'article')));
-// app.use('/vendor', require(path.join(__dirname, 'service_modules', 'vendor')));
-// app.use('/member', require(path.join(__dirname, 'service_modules', 'member')));
+app.use('/member', require(path.join(__dirname, 'service_modules', 'member')));
 // app.use('/action', require(path.join(__dirname, 'service_modules', 'action')));
 // app.use('/arrival', require(path.join(__dirname, 'service_modules', 'arrival')));
 

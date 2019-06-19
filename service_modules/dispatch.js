@@ -1,10 +1,8 @@
-
 const path = require('path');
 const db = require(path.join(__dirname, '..', 'db.js'));
 const router = require('express').Router();
 const { APP_ID, APP_SECRET } = require(path.join(__dirname, '..', 'config', 'token.json'));
 const { get } = require('axios');
-
 require('log-timestamp');
 
 /**
@@ -22,12 +20,17 @@ router.get('/', async ({ query: { code } }, res) => {
   try {
     let { data: { openid, session_key } } = await get(`https://api.weixin.qq.com/sns/jscode2session?appid=${ APP_ID }&secret=${ APP_SECRET }&js_code=${ code }&grant_type=authorization_code`);
     let result = { openid, session_key };
-    let user = await db.findOne(db.COLLECTIONS.USERS, {openid});
+    let user = await db.findOne(db.COLLECTIONS.USERS, { openid }, { "_id": 0 , "openid": 0});
     if (!user) {
-      db.insertOne(db.COLLECTIONS.USERS, { openid, data: "" });
+      db.insertOne(db.COLLECTIONS.USERS, { openid });
     } else {
       result = { ...result, ...user };
     }
+
+    let info = await db.findOne(db.COLLECTIONS.MEMBERS, {openid: openid}, {"_id": 0, "openid": 0});
+    if (!!info)
+      result["member"] = info;
+
     return res.json(result);
   } catch (e) {
     console.log(e)

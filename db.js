@@ -63,7 +63,7 @@ async function updateOne(collection, querySelector, updateData) {
 }
 
 /**
- * [insertOne description]
+ * [insert description]
  * @param  {[type]} collection    [description]
  * @param  {[type]} insertionData [description]
  * @return {[type]}               [description]
@@ -71,7 +71,7 @@ async function updateOne(collection, querySelector, updateData) {
 async function insertOne(collection, insertionData) {
   try {
     db = await MongoClient.connect(URL, { useNewUrlParser: true });
-    result = await db.db(NAME).collection(collection).insert(insertionData);
+    result = await db.db(NAME).collection(collection).insertOne(insertionData);
     return result;
   } catch (e) {
     throw Error(e);
@@ -87,7 +87,7 @@ async function insertOne(collection, insertionData) {
 async function insertMany(collection, insertionData) {
   try {
     db = await MongoClient.connect(URL, { useNewUrlParser: true });
-    result = await db.db(NAME).collection(collection).insert(insertionData);
+    result = await db.db(NAME).collection(collection).insertMany(insertionData);
     return result;
   } catch (e) {
     throw Error(e);
@@ -105,9 +105,5 @@ module.exports = {
   updateOne,
   insertOne,
   insertMany,
-  COLLECTIONS: {
-    BANNERS: "banners",
-    VENDORS: "vendors",
-    USERS: "users"
-  }
+  COLLECTIONS
 }

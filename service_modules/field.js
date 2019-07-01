@@ -1,6 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const db = require('../db');
+const path = require('path');
+const Database = require(path.join(__dirname, '..', '..', '.common','db.js'));
+const db = new Database();
+const { COLLECTIONS } = require(path.join(__dirname, '..', 'config', 'db.json'));
+const router = require('express').Router();
 
 /**
  * CUVita Server Side Implementations - Feed Generator
@@ -12,38 +14,39 @@ const db = require('../db');
 router.get('/', async({ query: { locale } }, res) => {
   if (!locale)
     return res.sendStatus(400);
-  let banners = await db.find("banners", { locale: parseInt(locale) }, {
+  locale = parseInt(locale);
+  let banners = await db.find("banners", { locale }, {
     "_id": 0,
     "locale": 0
   });
-
-  let referenceList = await db.find(db.COLLECTIONS.RECOMMENDATIONS, {}, {"_id": 0,"locale": 0});
-
-  for (i=0; i<referenceList.length; i++) {
-    referenceList[i].title = referenceList[i].title[parseInt(locale)];
-    referenceList[i].action = referenceList[i].action[parseInt(locale)];
-    for(j=0; j<referenceList[i].items.length; j++) {
-      let itemObject = await db.findOne(db.COLLECTIONS.VENDORS,
-        { "reference": referenceList[i].items[j] },
+  let recommendationsList = await db.find(COLLECTIONS.RECOMMENDATIONS, {}, { "_id": 0 });
+  console.log(recommendationsList.length);
+  for (i = 0; i < recommendationsList.length; i++) {
+    recommendationsList[i].title = recommendationsList[i].title[locale];
+    recommendationsList[i].action = recommendationsList[i].action[locale];
+    for(j = 0; j < recommendationsList[i].items.length; j++) {
+      let itemObject = await db.findOne(COLLECTIONS.VENDORS,
+        { "reference": recommendationsList[i].items[j] },
         {
           "_id": 0,
           "thumbnail": 1,
           "name": 1,
           "description" :1
         });
-        itemObject.name = itemObject.name[parseInt(locale)];
-        itemObject.description = itemObject.description[parseInt(locale)];
-        itemObject["reference"] = referenceList[i].items[j];
-        referenceList[i].items[j] = itemObject;
+        itemObject.name = itemObject.name[locale];
+        itemObject.description = itemObject.description[locale];
+        itemObject["reference"] = recommendationsList[i].items[j];
+        recommendationsList[i].items[j] = itemObject;
     }
   }
-
-  let articleList = await db.find(db.COLLECTIONS.ARTICLES, {}, {"_id": 0});
-
+  let articleList = await db.find(COLLECTIONS.ARTICLES, {},
+    {"_id": 0, "thumbnail":1, "title": 1, "description":1, "reference":1}, {"precedence": -1});
+  if(articleList.length > 5) {
+    articleList = articleList.slice(0, 5);
+  }
   return res.json({
     banner: banners[Math.floor(Math.random() * banners.length)],
-    recommendations: [referenceList[Math.floor(Math.random() * referenceList.length)],
-           referenceList[Math.floor(Math.random() * referenceList.length)]],
+    recommendations: [recommendationsList[Math.floor(Math.random() * recommendationsList.length)]],
     article: articleList
   });
 });

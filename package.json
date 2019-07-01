@@ -20,10 +20,14 @@
     "axios": "^0.18.0",
     "basic-auth": "^2.0.1",
     "body-parser": "^1.18.3",
+    "crypto-random-string": "^3.0.1",
     "express": "^4.16.4",
+    "fast-xml-parser": "^3.12.16",
     "log-timestamp": "^0.3.0",
+    "md5": "^2.2.1",
     "mongodb": "^3.2.2",
     "pug": "^2.0.3",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "tenpay": "^2.1.18"
   }
 }

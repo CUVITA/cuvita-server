@@ -44,7 +44,12 @@ router.get('/register', async ({ query: { name, gender, tel, birthday, openid } 
   await db.updateOne(COLLECTIONS.REGISTRATIONS, { openid }, {
     $set: {
       openid,
-      data: { name, parseInt(gender), tel, birthday },
+      data: {
+        name,
+        gender: parseInt(gender),
+        tel,
+        birthday
+      },
       status: 'PENDING',
       prepayID
     }

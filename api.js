@@ -18,8 +18,8 @@ app.listen(PORT, () => console.log(`API started on port ${ PORT }`));
 app.use('/dispatch', require(path.join(__dirname, 'service_modules', 'dispatch')));
 app.use('/field', require(path.join(__dirname, 'service_modules', 'field')));
 app.use('/vendor', require(path.join(__dirname, 'service_modules', 'vendor')));
-// app.use('/member', require(path.join(__dirname, 'service_modules', 'member')));
-// app.use('/cashier', require(path.join(__dirname, 'service_modules', 'cashier')));
+app.use('/member', require(path.join(__dirname, 'service_modules', 'member')));
+app.use('/cashier', require(path.join(__dirname, 'service_modules', 'cashier')));
 
 /**
  * Error handling

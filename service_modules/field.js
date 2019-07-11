@@ -20,7 +20,6 @@ router.get('/', async({ query: { locale } }, res) => {
     "locale": 0
   });
   let recommendationsList = await db.find(COLLECTIONS.RECOMMENDATIONS, {}, { "_id": 0 });
-  console.log(recommendationsList.length);
   for (i = 0; i < recommendationsList.length; i++) {
     recommendationsList[i].title = recommendationsList[i].title[locale];
     recommendationsList[i].action = recommendationsList[i].action[locale];

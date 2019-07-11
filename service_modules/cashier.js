@@ -1,12 +1,13 @@
 const path = require('path');
-const express = require('express');
-const router = express.Router();
-const db = require(path.join(__dirname, '..', '..', '.common','db.js'));
+const Database = require(path.join(__dirname, '..', '..', '.common','db.js'));
+const db = new Database();
+const { COLLECTIONS } = require(path.join(__dirname, '..', 'config', 'db.json'));
+const { APP_ID } = require(path.join(__dirname, '..', 'config', 'token.json'));
 const tenpay = require('tenpay');
 const config = require(path.join(__dirname, '..', 'config', 'tenpay.json'));
 const { body, total_fee } = require(path.join(__dirname, '..', 'config', 'merchandise.json'));
-const { APP_ID } = require(path.join(__dirname, '..', 'config', 'token.json'));
 const api = tenpay.init({ appid: APP_ID , ...config });
+const router = require('express').Router();
 const bodyParser = require('body-parser');
 
 const sessions = {};
@@ -31,14 +32,14 @@ router.get('/getPrepayID', async ({ query: { openid }, ip }, res) => {
 router.post('/dock', api.middlewareForExpress('pay'), async (req, res) => {
   let { result_code, transaction_id, openid } = req.weixin;
   if (result_code == 'SUCCESS') {
-    await db.updateOne(db.COLLECTIONS.REGISTRATIONS, { openid }, {
+    await db.updateOne(COLLECTIONS.REGISTRATIONS, { openid }, {
       $set: {
         status: 'SUCCESS',
         transaction_id
       }
     });
-    let { data } = await db.findOne(db.COLLECTIONS.REGISTRATIONS, { openid });
-    await db.insertOne(db.COLLECTIONS.MEMBERS, {
+    let { data } = await db.findOne(COLLECTIONS.REGISTRATIONS, { openid });
+    await db.insertOne(COLLECTIONS.MEMBERS, {
       ...data,
       openid,
       cardID: transaction_id.substring(transaction_id.length - 8, transaction_id.length),
@@ -53,7 +54,7 @@ router.post('/dock', api.middlewareForExpress('pay'), async (req, res) => {
       cardColor: 0
     });
   } else {
-    await db.updateOne(db.COLLECTIONS.REGISTRATIONS, { openid }, {
+    await db.updateOne(COLLECTIONS.REGISTRATIONS, { openid }, {
       $set: {
         status: 'FAIL',
         transaction_id

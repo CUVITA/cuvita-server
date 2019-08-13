@@ -1,0 +1,12 @@
+{
+  "image": {
+    "src": "",
+    "mode": "aspectFill"
+  },
+  "text": {
+    "header": ["开学啦！", "Back to School!"],
+    "description": ["CU开学季专题活动", "CU fall quarter initiation activities"],
+    "color": "white"
+  },
+  "target": ""
+}

@@ -5,15 +5,13 @@ const { COLLECTIONS } = require(path.join(__dirname, '..', 'config', 'db.json'))
 const router = require('express').Router();
 
 /**
- * [query description]
+ * Acquire vendor categories by realm
  * @type {Object}
  */
 router.get('/categories', async ({ query: { locale, realm } }, res) => {
   if (!locale || !realm)
     return res.sendStatus(400);
-  let { categories } = await db.findOne(COLLECTIONS.SCHEMAS, { realm }, {
-    "_id": 0
-  });
+  let { categories } = require(path.join(__dirname, '..', 'statics', 'schemas.json'))[realm];
   let resultCategories = [];
   for(i = 0; i < categories.length; i++) {
     resultCategories.push({
@@ -27,7 +25,7 @@ router.get('/categories', async ({ query: { locale, realm } }, res) => {
  * [query description]
  * @type {Object}
  */
-router.get('/lists', async ({ query: { locale, realm, category, start, end} }, res) => {
+router.get('/lists', async ({ query: { locale, realm, category, start, end } }, res) => {
   if(!realm || !category)
     return res.sendStatus(400);
   let lists = await db.find(COLLECTIONS.VENDORS,
@@ -35,12 +33,12 @@ router.get('/lists', async ({ query: { locale, realm, category, start, end} }, r
       realm,
       category
     }, {
-      "_id": 0,
-      "category": 0,
-      "address": 0,
-      "location": 0
+      _id: 0,
+      category: 0,
+      address: 0,
+      location: 0
     }, {
-      "rating": -1
+      rating: -1
     });
   if (start > (lists.length - 1))
     return res.sendStatus(400);
@@ -58,11 +56,11 @@ router.get('/lists', async ({ query: { locale, realm, category, start, end} }, r
  * [query description]
  * @type {Object}
  */
-router.get('/detail', async ({query: {locale, reference}}, res) => {
+router.get('/detail', async ({ query: { locale, reference } }, res) => {
   if (!reference)
     return res.sendStatus(400);
   let detail = await db.findOne(COLLECTIONS.VENDORS, { reference }, { "_id": 0 });
-  if(!detail)
+  if (!detail)
     return res.sendStatus(404);
   locale = parseInt(locale);
   detail.name = detail.name[locale];

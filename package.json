@@ -1,5 +1,5 @@
 {
-  "name": "cuvita-server",
+  "name": "@cuvita/server",
   "version": "0.1.6",
   "description": "",
   "main": "api.js",

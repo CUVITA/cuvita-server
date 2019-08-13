@@ -2,7 +2,7 @@ const path = require('path');
 const Database = require(path.join(__dirname, '..', '..', '.common','db.js'));
 const db = new Database();
 const { COLLECTIONS } = require(path.join(__dirname, '..', 'config', 'db.json'));
-const { getPrepayID } = require(path.join(__dirname, '..', 'config', 'api.json'));
+const { API: { getPrepayID } } = require(path.join(__dirname, '..', 'config', 'api.json'));
 const { get } = require('axios');
 const router = require('express').Router();
 

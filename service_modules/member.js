@@ -2,7 +2,7 @@ const path = require('path');
 const Database = require(path.join(__dirname, '..', '..', '.common','db.js'));
 const db = new Database();
 const { COLLECTIONS } = require(path.join(__dirname, '..', 'config', 'db.json'));
-const { API: { getPrepayID } } = require(path.join(__dirname, '..', 'config', 'api.json'));
+const { ROOT, API: { getBundle } } = require(path.join(__dirname, '..', 'config', 'api.json'));
 const { get } = require('axios');
 const router = require('express').Router();
 
@@ -36,29 +36,61 @@ router.get('/link', async({ query: { cardID, name, openid } }, res) => {
   }
 });
 
-router.get('/register', async ({ query: { name, gender, tel, birthday, openid } }, res) => {
-  if (!name || !gender || !tel || !birthday || !openid)
+router.post('/register', async ({ body: { name, gender, tel, birthday, openid, email, region } }, res) => {
+  if (!name || gender === null || !tel || !birthday || !openid || !email || region === null)
     return res.sendStatus(400);
-  let { data } = await get(`${getPrepayID}${openid}`);
-  let prepayID = data.package.substring(10);
-  await db.updateOne(COLLECTIONS.REGISTRATIONS, { openid }, {
-    $set: {
+  let { data: { bundle, outTradeNo } } = await get(`${ ROOT }${ getBundle }?item=membership&openid=${ openid }`);
+  await db.insertOne(COLLECTIONS.TRANSACTIONS, {
+    data: {
       openid,
-      data: {
-        name,
-        gender: parseInt(gender),
-        tel,
-        birthday
-      },
-      status: 'PENDING',
-      prepayID
+      name,
+      gender: parseInt(gender),
+      tel,
+      birthday: new Date(birthday),
+      email,
+      region: parseInt(region)
+    },
+    status: 'PENDING',
+    notify: `${ROOT}/member/register`,
+    outTradeNo
+  });
+  return res.json(bundle);
+});
+
+router.get('/register', async ({ query: { outTradeNo } }, res) => {
+  if (!outTradeNo)
+    return res.sendStatus(400);
+  let { data, transactionID } = await db.findOne(COLLECTIONS.TRANSACTIONS, { outTradeNo });
+  data.birthday = new Date(data.birthday);
+  await db.insertOne(COLLECTIONS.MEMBERS, {
+    ...data,
+    cardID: transactionID.substring(transactionID.length - 8, transactionID.length),
+    regdate: new Date(),
+    credit: {
+      cumulative: 0,
+      tier: 0,
+      redeem: 0
+    },
+    history: [],
+    coupon: [],
+    cardColor: 0
+  });
+  return res.end();
+});
+
+router.post('/modify', async({ body: { name, gender, tel, birthday, openid, email, region } }, res) => {
+  if (!name || gender === null || !tel || !birthday || !openid || !email || region === null)
+    return res.sendStatus(400);
+  return res.json((await db.updateOne(COLLECTIONS.MEMBERS, { openid }, {
+    $set: {
+      name,
+      gender: parseInt(gender),
+      tel,
+      birthday: new Date(birthday),
+      email,
+      region
     }
-  }, true);
-  // let exists = false;
-  // if (!! await db.find(COLLECTIONS.MEMBERS, { name, gender, tel, birthday }))
-  //   exists = true;
-  // res.json({ bundle: data, exists });
-  res.json(data);
+  }, true)).result);
 })
 
 module.exports = router;

@@ -23,7 +23,8 @@ app.use('/member', require(path.join(__dirname, 'service_modules', 'member')));
 app.use('/cashier', require(path.join(__dirname, 'service_modules', 'cashier')));
 app.use('/field', require(path.join(__dirname, 'service_modules', 'field')));
 app.use('/vendor', require(path.join(__dirname, 'service_modules', 'vendor')));
-app.use('/article', require(path.join(__dirname, 'service_modules', 'article')))
+app.use('/article', require(path.join(__dirname, 'service_modules', 'article')));
+app.use('/auto', require(path.join(__dirname, 'service_modules', 'auto')));
 
 /**
  * Error handling

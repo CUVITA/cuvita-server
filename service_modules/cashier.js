@@ -2,16 +2,13 @@ const path = require('path');
 const Database = require(path.join(__dirname, '..', '..', '.common','db.js'));
 const db = new Database();
 const { COLLECTIONS } = require(path.join(__dirname, '..', 'config', 'db.json'));
-// const { APP_ID } = require(path.join(__dirname, '..', 'config', 'token.json'));
-// const tenpay = require('tenpay');
-// const config = require(path.join(__dirname, '..', 'config', 'tenpay.json'));
 const merchandises = require(path.join(__dirname, '..', 'config', 'merchandises.json'));
 const api = require('tenpay').init({ appid: require(path.join(__dirname, '..', 'config', 'token.json')).APP_ID , ...require(path.join(__dirname, '..', 'config', 'tenpay.json')) });
 const router = require('express').Router();
 const { get } = require('axios');
 const bodyParser = require('body-parser');
 
-router.use(bodyParser.text({type: '*/xml'}));
+// router.use(bodyParser.text({type: '*/xml'}));
 
 router.get('/bundle', async ({ query: { openid, item } }, res) => {
   if (!openid)

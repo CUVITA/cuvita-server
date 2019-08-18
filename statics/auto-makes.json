@@ -1,0 +1,34 @@
+{
+  "makes" : [{
+      "name": "audi",
+      "label": ["奥迪", "Audi"]
+    }, {
+      "name": "bmw",
+      "label": ["宝马", "BMW"]
+    }, {
+      "name": "mercedes-benz",
+      "label": ["奔驰", "Mercedes"]
+    }, {
+      "name": "porsche",
+      "label": ["保时捷", "Porsche"]
+    }, {
+      "name": "lexus",
+      "label": ["凌志", "Lexus"]
+    }, {
+      "name": "infiniti",
+      "label": ["英菲尼迪", "Infiniti"]
+    }, {
+      "name": "acura",
+      "label": ["讴歌", "Acura"]
+    }, {
+      "name": "toyota",
+      "label": ["丰田", "Toyota"]
+    }, {
+      "name": "honda",
+      "label": ["本田", "Honda"]
+    }, {
+      "name": "ford",
+      "label": ["福特", "Ford"]
+    }
+  ]
+}

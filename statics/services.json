@@ -1,0 +1,57 @@
+[
+  {
+    "name": "concierge",
+    "target": ""
+  },
+  {
+    "name": "tickets",
+    "target": ""
+  },
+  {
+    "name": "artists",
+    "target": ""
+  },
+  {
+    "name": "volunteers",
+    "target": ""
+  },
+  {
+    "name": "auto",
+    "target": "/pages/auto-list/auto-list"
+  },
+  {
+    "name": "gourmet",
+    "target": "/pages/vendor-list/vendor-list?realm=gourmet"
+  },
+  {
+    "name": "lifestyle",
+    "target": "/pages/vendor-list/vendor-list?realm=lifestyle"
+  },
+  {
+    "name": "finance",
+    "target": "/pages/finance/finance",
+    "options": {
+      "src": ""
+    }
+  },
+  {
+    "name": "comm",
+    "target": ""
+  },
+  {
+    "name": "insurance",
+    "target": "",
+    "target": "/pages/insurance/insurance",
+    "options": {
+      "src": "https://mp.weixin.qq.com/s/zvlmTLLQdly66O8_iKB0ZQ"
+    }
+  },
+  {
+    "name": "consulting",
+    "target": ""
+  },
+  {
+    "name": "job",
+    "target": ""
+  }
+]

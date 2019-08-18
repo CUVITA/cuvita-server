@@ -51,7 +51,7 @@ router.post('/register', async ({ body: { name, gender, tel, birthday, openid, e
       region: parseInt(region)
     },
     status: 'PENDING',
-    notify: `${ROOT}/member/register`,
+    notify: `${ ROOT }/member/register`,
     outTradeNo
   });
   return res.json(bundle);
@@ -72,8 +72,7 @@ router.get('/register', async ({ query: { outTradeNo } }, res) => {
       redeem: 0
     },
     history: [],
-    coupon: [],
-    cardColor: 0
+    coupon: []
   });
   return res.end();
 });

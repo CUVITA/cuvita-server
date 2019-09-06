@@ -1,4 +1,22 @@
 {
-  "title": ["为你推荐", "Heads Up"],
-  "action": ["查看更多", "More"]
+  "ucsd": {
+    "title": ["为你推荐", "Heads Up"],
+    "action": ["查看更多", "More"],
+    "articles": ["2OmRmYHbhwYjIKkeMXM6Hw", "M8sLjwUA-q9K5zPR0Neo0g", "F_BXRPgcBrMjI-4JVbb8bg", "fIKbHAMDeX205k10Ev4nDA", "lE3xGGzEdkfwFqPyTSCsRg"]
+  },
+  "uci": {
+    "title": ["为你推荐", "Heads Up"],
+    "action": ["查看更多", "More"],
+    "articles": ["UNua_8C_6C2o44EQLXrWIg", "YZfgZU6ktnKFo8KXThpofw", "AWEoDf8mRXBZuFzO2a0rrA"]
+  },
+  "ucsb": {
+    "title": ["为你推荐", "Heads Up"],
+    "action": ["查看更多", "More"],
+    "articles": ["", "", ""]
+  },
+  "ucr": {
+    "title": ["为你推荐", "Heads Up"],
+    "action": ["查看更多", "More"],
+    "articles": ["", "", ""]
+  }
 }

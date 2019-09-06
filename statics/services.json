@@ -1,21 +1,5 @@
 [
   {
-    "name": "concierge",
-    "target": ""
-  },
-  {
-    "name": "tickets",
-    "target": ""
-  },
-  {
-    "name": "artists",
-    "target": ""
-  },
-  {
-    "name": "volunteers",
-    "target": ""
-  },
-  {
     "name": "auto",
     "target": "/pages/auto-list/auto-list"
   },
@@ -29,29 +13,23 @@
   },
   {
     "name": "finance",
-    "target": "/pages/finance/finance",
-    "options": {
-      "src": ""
-    }
+    "target": "/pages/finance/finance?src=https://mp.weixin.qq.com/s/wMkF9kl-u3Me1skB3NLAbg"
   },
   {
     "name": "comm",
-    "target": ""
+    "target": "/pages/communication/communication?src=https://mp.weixin.qq.com/s/TUISv-GyBRogaRJqtUQcfA"
   },
   {
     "name": "insurance",
     "target": "",
-    "target": "/pages/insurance/insurance",
-    "options": {
-      "src": "https://mp.weixin.qq.com/s/zvlmTLLQdly66O8_iKB0ZQ"
-    }
+    "target": "/pages/insurance/insurance?src=https://mp.weixin.qq.com/s/zvlmTLLQdly66O8_iKB0ZQ"
   },
   {
     "name": "consulting",
-    "target": ""
+    "target": "/pages/consulting/consulting?src=https://mp.weixin.qq.com/s/U-XtWtKD-5Kv4rKCH5hDHg"
   },
   {
     "name": "job",
-    "target": ""
+    "target": "/pages/job/job?src=https://mp.weixin.qq.com/s/R-M1B673z5Jc7ps7MNf_UQ"
   }
 ]

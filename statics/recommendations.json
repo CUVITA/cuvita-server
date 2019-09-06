@@ -1,12 +1,45 @@
-[
-  {
-    "title": ["品味圣迭戈", "Tasty San Diego"],
-    "action": ["查看更多", "More"],
-    "items": ["d79f671f08a7c7e3", "fc3a10fc43599614", "f4b866a39c8799dd", "a059d068e1f3e801"]
-  },
-  {
-    "title": ["校园美食", "Campus Cusine"],
-    "action": ["查看更多", "More"],
-    "items": ["bd0c73056ff10247", "b6d464ca245223db", "33899d0fa5698605", "68bdee582206de08"]
-  }
-]
+{
+  "ucsd": [
+    {
+      "title": ["品味圣迭戈", "Tasty San Diego"],
+      "action": ["查看更多", "More"],
+      "items": ["d79f671f08a7c7e3", "fc3a10fc43599614", "f4b866a39c8799dd", "a059d068e1f3e801"]
+    },
+    {
+      "title": ["校园美食", "Campus Cusine"],
+      "action": ["查看更多", "More"],
+      "items": ["bd0c73056ff10247", "b6d464ca245223db", "33899d0fa5698605", "68bdee582206de08"]
+    }
+  ],
+  "uci": [
+    {
+      "title": ["舌尖上的尔湾", "A Bite of Irvine"],
+      "action": ["查看更多", "More"],
+      "items": ["2c743aef77d5db04", "da53020e9b6cff1d", "e63sd788e5f4f903", "92d21c9poi95s63a"]
+    }
+  ],
+  "ucsb": [
+    {
+      "title": ["{{ Title }}", "{{ Title }}"],
+      "action": ["查看更多", "More"],
+      "items": ["2c743aef77d5db04", "fc3a10fc43599614", "f4b866a39c8799dd", "a059d068e1f3e801"]
+    },
+    {
+      "title": ["{{ Title }}", "{{ Title }}"],
+      "action": ["查看更多", "More"],
+      "items": ["bd0c73056ff10247", "b6d464ca245223db", "33899d0fa5698605", "68bdee582206de08"]
+    }
+  ],
+  "ucr": [
+    {
+      "title": ["{{ Title }}", "{{ Title }}"],
+      "action": ["查看更多", "More"],
+      "items": ["2c743aef77d5db04", "fc3a10fc43599614", "f4b866a39c8799dd", "a059d068e1f3e801"]
+    },
+    {
+      "title": ["{{ Title }}", "{{ Title }}"],
+      "action": ["查看更多", "More"],
+      "items": ["bd0c73056ff10247", "b6d464ca245223db", "33899d0fa5698605", "68bdee582206de08"]
+    }
+  ]
+}

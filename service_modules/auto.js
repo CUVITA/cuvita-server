@@ -1,18 +1,15 @@
 const path = require('path');
 const axios = require('axios');
 const router = require('express').Router();
+const { mapIdToRegion } = require(path.join(__dirname, '..', 'utils', 'region-converter'));
 
 /**
  * CUVita Server Side Implementations - CarMax Scrapper
  * @author relubwu
- * @version 0.1.7
+ * @version 0.2.1
  * @copyright  © CHINESE UNION 2019
  */
 
-const regions = {
-  sd: 92092,
-  iv: 92602
-}
 const forgeListURL = (make, zipCode, skip=0, sort=20, take=10, radius=50) => {
   return `https://www.carmax.com/cars/api/search/run?uri=%2Fcars%2F${ make }&skip=${ skip }&take=${ take }&radius=${ radius }&zipCode=${ zipCode }&sort=${ sort }`;
 }
@@ -23,7 +20,7 @@ const generateThumbnail = (stockNumber) => {
   return `https://img2.carmax.com/image/${ stockNumber }`;
 }
 const generateProxyThumbnail = (stockNumber) => {
-    return `https://api.cuvita.info/auto/thumbnail?stockNumber=${ stockNumber }`;
+  return `https://api.cuvita.net/auto/thumbnail?stockNumber=${ stockNumber }`;
 }
 const generateImage = (stockNumber, no, obs) => {
   return `https://img2.carmax.com/img/vehicles/${ stockNumber }/${ no }/${ obs }/375.jpg`;
@@ -31,13 +28,13 @@ const generateImage = (stockNumber, no, obs) => {
 const generateProxyImage = (url, stockNumber) => {
  let components = url.substring(8).split('/');
  let no = components[4], obs = components[5];
- return `https://api.cuvita.info/auto/image?stockNumber=${ stockNumber }&no=${ no }&obs=${ obs }`;
+ return `https://api.cuvita.net/auto/image?stockNumber=${ stockNumber }&no=${ no }&obs=${ obs }`;
 }
 
 router.get('/lists', async ({ query: { make, region, skip } }, res) => {
   if (!make || !region)
     return res.sendStatus(400);
-  let { data: { items } } = await axios.get(forgeListURL(make, regions[region], parseInt(skip)));
+  let { data: { items } } = await axios.get(forgeListURL(make, mapIdToRegion(region).zipCode, parseInt(skip)));
   for (let item in items) {
     items[item].thumbnail = generateProxyThumbnail(items[item].stockNumber);
     delete items[item].storeCity;

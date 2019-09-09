@@ -1,44 +1,40 @@
 {
-  "gourmet": {
-    "categories": [{
-      "name": "asia",
-      "label": ["亚洲美食", "Asia"]
-    }, {
-      "name": "chinese",
-      "label": ["中华荟萃", "Chinese"]
-    }, {
-      "name": "boba",
-      "label": ["奶茶果汁", "Boba"]
-    }, {
-      "name": "western",
-      "label": ["西式佳肴", "Western"]
-    }, {
-      "name": "fastfood",
-      "label": ["快餐便当", "Fastfood"]
-    }, {
-      "name": "hotpot",
-      "label": ["美味火锅", "Hotpot"]
-    }, {
-      "name": "bbq",
-      "label": ["热辣烤串", "BBQ"]
-    }, {
-      "name": "dimsum",
-      "label": ["广式点心", "Dimsum"]
-    }]
-  },
-  "lifestyle": {
-    "categories": [{
-      "name": "salon",
-      "label": ["美发沙龙", "Salon"]
-    }, {
-      "name": "fitness",
-      "label": ["游泳健身", "Fitness"]
-    }, {
-      "name": "ktv",
-      "label": ["欢乐K歌", "KTV"]
-    }, {
-      "name": "fashion",
-      "label": ["时尚潮牌", "Fashion"]
-    }]
-  }
+  "gourmet": [{
+    "name": "asia",
+    "label": ["亚洲美食", "Asia"]
+  }, {
+    "name": "chinese",
+    "label": ["中华荟萃", "Chinese"]
+  }, {
+    "name": "boba",
+    "label": ["奶茶果汁", "Boba"]
+  }, {
+    "name": "western",
+    "label": ["西式佳肴", "Western"]
+  }, {
+    "name": "fastfood",
+    "label": ["快餐便当", "Fastfood"]
+  }, {
+    "name": "hotpot",
+    "label": ["美味火锅", "Hotpot"]
+  }, {
+    "name": "bbq",
+    "label": ["热辣烤串", "BBQ"]
+  }, {
+    "name": "dimsum",
+    "label": ["广式点心", "Dimsum"]
+  }],
+  "lifestyle": [{
+    "name": "salon",
+    "label": ["美发沙龙", "Salon"]
+  }, {
+    "name": "fitness",
+    "label": ["游泳健身", "Fitness"]
+  }, {
+    "name": "ktv",
+    "label": ["欢乐K歌", "KTV"]
+  }, {
+    "name": "fashion",
+    "label": ["时尚潮牌", "Fashion"]
+  }]
 }

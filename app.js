@@ -1,6 +1,6 @@
 const { env: { NODE_ENV, PORT } } = process;
 const app = require('express')();
-require('log-timestamp')
+require('log-timestamp');
 
 /**
  * CUVita Server Side Implementations

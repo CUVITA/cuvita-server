@@ -14,6 +14,7 @@ router.get('/banner/:region', async ({ params: { region } }, res) => {
 
 router.get('/recommendation/:region', async ({ params: { region } }, res) => {
   let { recommendations } = await database.findOne('recommendations', { region });
+  if (!recommendations) return res.json([]);
   let result = [];
   for (let i in recommendations) {
     let { title, action } = recommendations[i];

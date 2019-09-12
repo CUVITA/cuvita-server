@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const validator = require('express-validator');
 const credentials = require(`${ process.cwd() }/config/credentials.json`);
 const database = require(`${ process.cwd() }/utils/database`);
 
@@ -20,7 +19,7 @@ router.get('/:code', async ({ params: { code } }, res) => {
   if (!user)
     database.insertOne('users', { openid });
   else
-    result = { ...result, ...user };
+    result = { ...result, user };
   let info = await database.findOne('members', { openid }, { projection: { "_id": 0, "openid": 0 } });
   if (!!info) result.member = info;
   return res.json(result);

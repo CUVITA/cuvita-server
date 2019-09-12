@@ -16,6 +16,9 @@ const forgeListURL = (make, zipCode, skip=0, sort=20, take=10, radius=50) => {
 const forgeDetailURL = (stockNumber) => {
   return `https://shoppersapp-gateway.carmax.com/api/vehicles/${ stockNumber }`;
 }
+const generateThumbnail = (stockNumber) => {
+  return `https://img2.carmax.com/image/${ stockNumber }`;
+}
 const generateImage = (url, stockNumber) => {
   let components = url.substring(8).split('/');
   let no = components[4], obs = components[5];
@@ -30,10 +33,10 @@ router.get('/makes', async (req, res) => {
 router.get('/lists/:make/:region', validator.query('skip').exists().toInt(), async (req, res) => {
   if (validator.validationResult(req).errors.length) return res.status(400).end();
   let { params: { make, region }, query: { skip } } = req;
-  let { zipCode } = await database.findOne('regions', { region });
+  let { zipCode } = await database.findOne('regions', { alias: region });
   let { data: { items } } = await axios.get(forgeListURL(make, zipCode, skip));
   for (let item in items) {
-    // items[item].thumbnail = generateProxyThumbnail(items[item].stockNumber);
+    items[item].thumbnail = generateThumbnail(items[item].stockNumber);
     delete items[item].storeCity;
     delete items[item].geoCity;
     delete items[item].state;
@@ -53,7 +56,7 @@ router.get('/lists/:make/:region', validator.query('skip').exists().toInt(), asy
     delete items[item].isComingSoon;
     delete items[item].comingSoonDate;
   }
-  return res.json({ [make]: items });
+  return res.json(items);
 });
 
 router.get('/detail/:stockNumber', async ({ params: { stockNumber } }, res) => {

@@ -14,7 +14,6 @@ router.get('/banner/:region', async ({ params: { region } }, res) => {
 
 router.get('/recommendation/:region', async ({ params: { region } }, res) => {
   let { recommendations } = await database.findOne('recommendations', { region });
-  if (!recommendations) return res.json([]);
   let result = [];
   for (let i in recommendations) {
     let { title, action } = recommendations[i];
@@ -28,7 +27,7 @@ router.get('/recommendation/:region', async ({ params: { region } }, res) => {
 });
 
 router.get('/feed/:region', async ({ params: { region } }, res) => {
-  return res.json(await database.find('articles', { region }, { projection: { "_id": 0, "rank": 0, "region": 0 }, sort: { "rank": -1 } }));
+  return res.json(await database.find('articles', { region }, { projection: { "_id": 0, "rank": 0, "region": 0 }, sort: { "rank": -1 }, limit: 5 }));
 });
 
 router.get('/services', async (req, res) => {

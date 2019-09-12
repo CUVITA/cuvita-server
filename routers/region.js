@@ -12,6 +12,10 @@ const nearestLocation = require('map-nearest-location');
 
 const maxDistance = 321868;
 
+router.get('/', async (req, res) => {
+  return res.json(await database.find('regions', {}, { projection: { "_id": 0 } }));
+});
+
 router.get('/nearest', validator.query(['lat', 'long']).exists().toFloat(), async (req, res) => {
   if (validator.validationResult(req).errors.length) return res.status(400).end();
   let { query: { lat, long } } = req;
@@ -21,7 +25,7 @@ router.get('/nearest', validator.query(['lat', 'long']).exists().toFloat(), asyn
     locations.push({ lat: region.geoLocation.lat, long: region.geoLocation.long });
   let { location, distance } = nearestLocation({ lat, long }, locations);
   if (distance > maxDistance) return res.status(404).end();
-  return res.json(await database.findOne('regions', { geoLocation: { ...location } }, { projection: { "_id": 0, "region": 1 } }));
+  return res.json(await database.findOne('regions', { geoLocation: { ...location } }, { projection: { "_id": 0 } }));
 });
 
 module.exports = router;

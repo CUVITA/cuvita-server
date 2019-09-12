@@ -25,3 +25,7 @@ app.use('/member', require(`${ process.cwd() }/routers/member`));
 app.use('/vendor', require(`${ process.cwd() }/routers/vendor`));
 app.use('/auto', require(`${ process.cwd() }/routers/auto`));
 app.use('/region', require(`${ process.cwd() }/routers/region`));
+app.use('/article', require(`${ process.cwd() }/routers/article`));
+app.use('/school', require(`${ process.cwd() }/routers/school`));
+app.use('/concierge', require(`${ process.cwd() }/routers/concierge`));
+app.use('/user', require(`${ process.cwd() }/routers/user`));

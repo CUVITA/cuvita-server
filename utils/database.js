@@ -58,5 +58,6 @@ module.exports = {
     } catch (e) {
       throw Error(e);
     }
-  }
+  },
+  ObjectId
 }

@@ -27,7 +27,7 @@ router.post('/link', validator.body(['openid', 'cardid', 'name']).exists(), asyn
   return res.status(200).end();
 });
 
-router.post('/register', [ validator.body(['openid', 'name', 'gender', 'tel', 'birthday', 'email', 'region']).exists(), validator.body('name').trim(), validator.body('gender').toInt(), validator.body('birthday').toDate() ], async(req, res) => {
+router.post('/register', [ validator.body(['openid', 'name', 'gender', 'tel', 'birthday', 'email', 'school']).exists(), validator.body('name').trim(), validator.body('gender').toInt(), validator.body('birthday').toDate() ], async(req, res) => {
   if (validator.validationResult(req).errors.length) return res.status(400).end();
   let { body } = req;
   let { data: { bundle, out_trade_no } } = await axios.get(`http://localhost:${ PORT }/cashier/membership/bundle?openid=${ body.openid }`);
@@ -42,7 +42,7 @@ router.get('/register/:out_trade_no', async (req, res) => {
   return res.end();
 });
 
-router.post('/modify', [ validator.body(['openid', 'name', 'gender', 'tel', 'birthday', 'email', 'region']).exists(), validator.body('gender').toInt(), validator.body('birthday').toDate() ], async(req, res) => {
+router.post('/modify', [ validator.body(['openid', 'name', 'gender', 'tel', 'birthday', 'email', 'school']).exists(), validator.body('gender').toInt(), validator.body('birthday').toDate() ], async(req, res) => {
   if (validator.validationResult(req).errors.length) return res.status(400).end();
   let { body } = req;
   await database.updateOne('members', { openid: body.openid }, { $set: { ...body } });

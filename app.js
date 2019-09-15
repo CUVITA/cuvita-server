@@ -1,4 +1,3 @@
-const { env: { NODE_ENV, PORT } } = process;
 const app = require('express')();
 require('log-timestamp');
 
@@ -9,9 +8,11 @@ require('log-timestamp');
  * @copyright  © CHINESE UNION 2019
  */
 
-app.listen(PORT, () => console.log(`Application started on ${ PORT }`)).on('error', e => {
+const port = require('minimist')(process.argv.slice(2)).p || 8083;
+
+app.listen(port, () => console.log(`Application started on ${ port }`)).on('error', e => {
   if (e.code === 'EADDRINUSE') {
-    console.error(`Port ${ PORT } already in use, exiting`);
+    console.error(`Port ${ port } already in use, exiting`);
   } else {
     console.error(`Unexpected error ${ e.code } occured`);
   }

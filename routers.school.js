@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   let list = await database.find('schools', {}, { projection: { "_id": 0 } });
   let matrix = [];
   let values = [];
-  for (let school of list) {
+  for (let school of list)
     for (let index in school.name) {
       matrix[index] = matrix[index] ? matrix[index] : [];
       matrix[index].push(school.name[index]);

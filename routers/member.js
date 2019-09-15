@@ -1,6 +1,6 @@
-const { env: { PORT } } = process;
 const router = require('express').Router();
 const database = require(`${ process.cwd() }/utils/database`);
+const localhost = require(`${ process.cwd() }/utils/localhost`);
 const validator = require('express-validator');
 const axios = require('axios');
 
@@ -30,8 +30,8 @@ router.post('/link', validator.body(['openid', 'cardid', 'name']).exists(), asyn
 router.post('/register', [ validator.body(['openid', 'name', 'gender', 'tel', 'birthday', 'email', 'school']).exists(), validator.body('name').trim(), validator.body('gender').toInt(), validator.body('birthday').toDate() ], async(req, res) => {
   if (validator.validationResult(req).errors.length) return res.status(400).end();
   let { body } = req;
-  let { data: { bundle, out_trade_no } } = await axios.get(`http://localhost:${ PORT }/cashier/membership/bundle?openid=${ body.openid }`);
-  await database.insertOne('transactions', { data: { ...body }, status: 'PENDING', notify: `http://localhost:${ PORT }/member/register`, out_trade_no});
+  let { data: { bundle, out_trade_no } } = await localhost.get(`/cashier/membership/bundle`, { params: { openid: body.openid } });
+  await database.insertOne('transactions', { data: { ...body }, status: 'PENDING', notify: `http://localhost:${ localhost.port }/member/register`, out_trade_no});
   return res.json(bundle);
 });
 

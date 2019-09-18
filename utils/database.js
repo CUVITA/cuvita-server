@@ -2,7 +2,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 
 const DATABASE_NAME = require('minimist')(process.argv.slice(2)).d;
 const DATABASE_URL = "mongodb://localhost:27017"
-const DATABASE_AUTH = { username: "api", password: "EGKCyzI2nxVdjAveiAzsfwP9p" };
+const DATABASE_AUTH = { username: require(`${ process.cwd() }/config/credentials.json`).database_username, password: require(`${ process.cwd() }/config/credentials.json`).database_password };
 let db;
 
 async function connect () {

@@ -17,6 +17,7 @@ const decodePolyline = require('decode-google-map-polyline');
 
 const extendedHours = 5;
 const limit = 5;
+const stash = {};
 
 router.use(require('body-parser').json());
 
@@ -95,8 +96,23 @@ router.post('/stage', validator.body(['openid', 'schedule', 'flight']).exists(),
   return res.status(200).end();
 });
 
-router.post('/report/:id', validator.body(['latitude, longitude']).exists().toFloat(), async(req, res) => {
-
+router.post('/report/:id', async(req, res) => {
+  let { params: { id }, body: { latitude, longitude } } = req;
+  console.log(id, [latitude, longitude]);
+  if (!stash[id]) stash[id] = [];
+  stash[id].push({ latitude, longitude });
 });
+
+async function collector () {
+  for (let id in stash) {
+    let center = geolib.getCenter(stash[id]);
+    if (center) {
+      await database.updateOne('schedules', { _id: database.ObjectId(id) }, { $set: { "location.coordinates": [center.longitude.toFixed(6), center.latitude.toFixed(6)] } });
+    }
+    stash[id] = [];
+  }
+}
+
+setInterval(collector, 1000);
 
 module.exports = router;

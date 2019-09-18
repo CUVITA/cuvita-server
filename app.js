@@ -8,7 +8,10 @@ require('log-timestamp');
  * @copyright  © CHINESE UNION 2019
  */
 
-const port = require('minimist')(process.argv.slice(2)).p || 8083;
+const port = require('minimist')(process.argv.slice(2)).p;
+const database = require('minimist')(process.argv.slice(2)).d;
+
+if (!port || !database) { console.error('Please specify port using -p, database using -d, exiting'); process.exit(); }
 
 app.listen(port, () => console.log(`Application started on ${ port }`)).on('error', e => {
   if (e.code === 'EADDRINUSE') {

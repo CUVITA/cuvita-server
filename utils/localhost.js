@@ -1,4 +1,4 @@
-const port = require('minimist')(process.argv.slice(2)).p || 8083;
+const port = require('minimist')(process.argv.slice(2)).port;
 const axios = require('axios');
 
 module.exports = {

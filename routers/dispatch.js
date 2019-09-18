@@ -15,7 +15,7 @@ router.get('/:code', async ({ params: { code } }, res) => {
   if (errcode === 40029)
     return res.status(400).end();
   let result = { openid, session_key };
-  let user = await database.findOne('users', { openid }, { projection: { "_id": 0 } });
+  let user = await database.findOne('users', { openid }, { projection: { "_id": 0, "openid": 0 } });
   if (!user)
     database.insertOne('users', { openid });
   else

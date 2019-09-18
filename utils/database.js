@@ -1,6 +1,6 @@
 const { MongoClient, ObjectId } = require('mongodb');
 
-const DATABASE_NAME = "production";
+const DATABASE_NAME = require('minimist')(process.argv.slice(2)).d;
 const DATABASE_URL = "mongodb://localhost:27017"
 const DATABASE_AUTH = { username: "api", password: "EGKCyzI2nxVdjAveiAzsfwP9p" };
 let db;

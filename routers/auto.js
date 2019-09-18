@@ -6,7 +6,7 @@ const axios = require('axios');
 /**
  * CUVita Server Side Implementations - Auto API
  * @author relubwu
- * @version 0.2.2
+ * @version 0.2.3
  * @copyright  © CHINESE UNION 2019
  */
 

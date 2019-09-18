@@ -5,7 +5,7 @@ const database = require(`${ process.cwd() }/utils/database`);
 /**
  * CUVita Server Side Implementations - WeChat SSO
  * @author relubwu
- * @version 0.2.2
+ * @version 0.2.3
  * @copyright  © CHINESE UNION 2019
  */
 

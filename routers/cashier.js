@@ -8,7 +8,7 @@ const tenpay = require('tenpay').init({ ...credentials });
 /**
  * CUVita Server Side Implementations - Platform Cashier
  * @author relubwu
- * @version 0.2.2
+ * @version 0.2.3
  * @copyright  © CHINESE UNION 2019
  */
 

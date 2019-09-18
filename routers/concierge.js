@@ -11,7 +11,7 @@ const decodePolyline = require('decode-google-map-polyline');
 /**
  * CUVita Server Side Implementations - Concierge API
  * @author relubwu
- * @version 0.2.2
+ * @version 0.2.3
  * @copyright  © CHINESE UNION 2019
  */
 
@@ -74,10 +74,11 @@ router.get('/schedule/:id', async ({ params: { id } }, res) => {
       let vdist = Math.abs(schedule.location.lat - schedule.destination.location.lat);
       schedule.map.include = schedule.location.lat > schedule.destination.location.lat ? [ { latitude: schedule.location.lat + vdist * 0.1, longitude: schedule.location.long }, { latitude: schedule.destination.location.lat - vdist * 0.1, longitude: schedule.destination.location.long } ] : [ { latitude: schedule.location.lat - vdist * 0.1, longitude: schedule.location.long }, { latitude: schedule.destination.location.lat + vdist * 0.1, longitude: schedule.destination.location.long } ];
       let { data: { routes } } = await axios.get('https://maps.googleapis.com/maps/api/directions/json', { params: { origin: `${ schedule.location.lat },${ schedule.location.long }`, destination: `${ schedule.destination.location.lat },${ schedule.destination.location.long }`, key: credentials.googlemap_key } });
-      schedule.map.polyline = [ { points: decodePolyline(routes[0].overview_polyline.points), color: '#1aad19', width: 10, borderColor: '#ffbe00', borderWidth: 2 } ];
+      schedule.map.polyline = [ { points: decodePolyline(routes[0].overview_polyline.points), color: '#00c250', width: 10, borderColor: '#ffbe00', borderWidth: 2 } ];
       schedule.arrivalTime = new Date();
       schedule.arrivalTime.setSeconds(new Date().getSeconds() + routes[0].legs[routes[0].legs.length - 1].duration.value);
       schedule.arrivalTime = schedule.arrivalTime.toISOString();
+      schedule.hideLocation = true;
       break;
     case 'ARRIVED':
       schedule.map = schedule.destination.location;
@@ -92,6 +93,10 @@ router.post('/stage', validator.body(['openid', 'schedule', 'flight']).exists(),
   let { body: { openid, schedule, flight } } = req;
   await database.updateOne('users', { openid }, { $set: { concierge: { schedule, flight } } });
   return res.status(200).end();
+});
+
+router.post('/report/:id', validator.body(['latitude, longitude']).exists().toFloat(), async(req, res) => {
+
 });
 
 module.exports = router;

@@ -4,7 +4,7 @@ const database = require(`${ process.cwd() }/utils/database`);
 /**
  * CUVita Server Side Implementations - User API
  * @author relubwu
- * @version 0.2.2
+ * @version 0.2.3
  * @copyright  © CHINESE UNION 2019
  */
 

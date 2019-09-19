@@ -113,6 +113,16 @@ async function collector () {
   }
 }
 
+async function trigger () {
+  let list = await database.find('schedules', { departTime: { $lt: new Date() } });
+  for (let schedule of list) {
+      if (schedule.status === 'PENDING') {
+          database.updateOne('schedules', { _id: database.ObjectId(schedule._id) }, { $set: { status: 'ENROUTE'  } });
+      }
+  }
+}
+
 setInterval(collector, 1000);
+setInterval(trigger, 60000);
 
 module.exports = router;

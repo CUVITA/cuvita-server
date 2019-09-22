@@ -5,6 +5,13 @@ const DATABASE_URL = "mongodb://localhost:27017"
 const DATABASE_AUTH = { username: require(`${ process.cwd() }/config/credentials.json`).database_username, password: require(`${ process.cwd() }/config/credentials.json`).database_password };
 let db;
 
+/**
+ * CUVita Server Side Implementations - Database Connection Utility
+ * @author relubwu
+ * @version 0.2.5
+ * @copyright  © CHINESE UNION 2019
+ */
+
 async function connect () {
   let connection = await MongoClient.connect(DATABASE_URL, {
     useNewUrlParser: true,

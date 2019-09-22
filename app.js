@@ -4,7 +4,7 @@ require('log-timestamp');
 /**
  * CUVita Server Side Implementations
  * @author relubwu
- * @version 0.2.3
+ * @version 0.2.5
  * @copyright  © CHINESE UNION 2019
  */
 
@@ -14,11 +14,7 @@ const database = require('minimist')(process.argv.slice(2)).d;
 if (!port || !database) { console.error('Please specify port using -p, database using -d, exiting'); process.exit(); }
 
 app.listen(port, () => console.log(`Application started on ${ port }`)).on('error', e => {
-  if (e.code === 'EADDRINUSE') {
-    console.error(`Port ${ port } already in use, exiting`);
-  } else {
-    console.error(`Unexpected error ${ e.code } occured`);
-  }
+  e.code === 'EADDRINUSE' ? console.error(`Port ${ port } already in use, exiting`) : console.error(`Unexpected error ${ e.code } occured`);
   process.exit();
 });
 
@@ -31,5 +27,4 @@ app.use('/auto', require(`${ process.cwd() }/routers/auto`));
 app.use('/region', require(`${ process.cwd() }/routers/region`));
 app.use('/article', require(`${ process.cwd() }/routers/article`));
 app.use('/school', require(`${ process.cwd() }/routers/school`));
-app.use('/concierge', require(`${ process.cwd() }/routers/concierge`));
 app.use('/user', require(`${ process.cwd() }/routers/user`));

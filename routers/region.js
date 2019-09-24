@@ -37,8 +37,7 @@ router.get('/nearest', validator.query(['lat', 'long']).exists().toFloat(), asyn
   for (let region of regions)
     locations.push({ lat: region.geoLocation.lat, long: region.geoLocation.long });
   let { location, distance } = nearestLocation({ lat, long }, locations);
-  if (distance > maxDistance) return res.status(404).end();
-  return res.json(await database.findOne('regions', { geoLocation: { ...location } }, { projection: { "_id": 0 } }));
+  return distance > maxDistance ? res.json() : res.json(await database.findOne('regions', { geoLocation: { ...location } }, { projection: { "_id": 0 } }));
 });
 
 router.get('/translate/:locations', async ({ params: { locations } }, res) => {

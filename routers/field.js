@@ -4,7 +4,7 @@ const database = require(`${ process.cwd() }/utils/database`);
 /**
  * CUVita Server Side Implementations - Feed Generator
  * @author relubwu
- * @version 0.2.3
+ * @version 0.2.5
  * @copyright  © CHINESE UNION 2019
  */
 
@@ -32,6 +32,10 @@ router.get('/feed/:region', async ({ params: { region } }, res) => {
 
 router.get('/services', async (req, res) => {
   return res.json(await database.find('services', {}, { projection: { "_id": 0 } }));
-})
+});
+
+router.get('/tray/:region', async ({ params: { region } }, res) => {
+  return res.json(await database.findOne('trays', { region }, { projection: { "_id": 0, "region": 0 } }));
+});
 
 module.exports = router;

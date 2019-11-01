@@ -1,6 +1,10 @@
 /**
  * Created by hsun on 2019-10-31.
  * Usage:
+ *    Before you start
+ *      add your yelp API key in /config/crawler.json as {apiKey: "..."}
+ *      visit: https://www.yelp.com/developers/v3/manage_app
+ *
  *    1. Copy Yelp vendor id to vendor_id, line by line
  *    2. execute `node yelp_crawler.js < vendor_id` in terminal
  *

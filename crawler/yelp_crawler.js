@@ -15,7 +15,9 @@
  *    After crawling the data, you will end up with the db document
  *      without "description" and its Chinese "name". Please ask CU
  *      team to find people to give the vendor a description and
- *      translate the names and descriptions
+ *      translate the names and descriptions. Apart from that, either
+ *      you or others are going to select the categories for the
+ *      restaurant (choose from the 8 available categories)
  *
  *    When they finished the translation, you can insert the
  *      documents to the database
@@ -47,9 +49,16 @@ function crawl(merchants=[]) {
 
       const result = {
         "realm" : "gourmet",
-        "category" : merchData.categories.map((item)=>{
-          return item.alias
-        }),
+        "category" : [
+            "asia",
+            "chinese",
+            "boba",
+            "western",
+            "fastfood",
+            "hotpot",
+            "bbq",
+            "dimsum"
+        ],
         "tag" : tags,
         "description" : [
           "",
@@ -62,8 +71,8 @@ function crawl(merchants=[]) {
         "location" : {
           "type" : "Point",
           "coordinates" : [
-            merchData.coordinates.latitude,
-            merchData.coordinates.longitude
+            merchData.coordinates.longitude,
+            merchData.coordinates.latitude
           ]
         },
         "address" : {

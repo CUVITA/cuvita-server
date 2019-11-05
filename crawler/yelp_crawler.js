@@ -6,7 +6,8 @@
  *      visit: https://www.yelp.com/developers/v3/manage_app
  *
  *    1. Copy Yelp vendor id to vendor_id, line by line
- *    2. execute `node yelp_crawler.js < vendor_id` in terminal
+ *    2. execute `node yelp_crawler.js ${realm} < vendor_id` in terminal
+ *        (*note: realm is either gourmet or lifestyle)
  *
  *    Or if you only have 1 or 2 vendors to add, simply add these
  *      vendor id(s) as command line arguments
@@ -27,7 +28,7 @@ const apiKey = require('../config/crawler.json').apiKey;
 const fs = require('fs');
 const readline = require('readline');
 
-function crawl(merchants=[]) {
+function crawl(merchants=[], realm="gourmet") {
   merchants.map((merchant) => {
     axios({
       method: 'get',
@@ -48,7 +49,7 @@ function crawl(merchants=[]) {
       }
 
       const result = {
-        "realm" : "gourmet",
+        "realm" : realm,
         "category" : [
             "asia",
             "chinese",
@@ -96,18 +97,28 @@ function crawl(merchants=[]) {
   });
 }
 
-if (process.argv.length > 2) {
-  process.argv.forEach((item, idx) => {
-    if(idx >= 2)
-      crawl([item])
-  })
-} else {
-  const rl = readline.createInterface({
-    input: process.stdin
-  });
 
-  rl.on('line', (line) => {
-    crawl([line])
-  });
+const realm = process.argv[2] || "gourmet";
+const rl = readline.createInterface({
+  input: process.stdin
+});
+
+let vendors = [];
+rl.on('line', (line) => {
+  vendors.push(line)
+});
+
+// delay since yelp does not like too many requests
+let i = 0;
+function crawlWithDelay() {
+  setTimeout(() => {
+    crawl([vendors[i]], realm);
+    i++;
+    if (i < vendors.length) {
+      crawlWithDelay();
+    }
+  }, 100);
 }
+crawlWithDelay();
+
 

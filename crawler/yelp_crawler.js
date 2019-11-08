@@ -9,10 +9,6 @@
  *    2. execute `node yelp_crawler.js ${realm} < vendor_id` in terminal
  *        (*note: realm is either gourmet or lifestyle)
  *
- *    Or if you only have 1 or 2 vendors to add, simply add these
- *      vendor id(s) as command line arguments
- *    1. execute `node yelp_crawler.js {vendor-id...}` in terminal
- *
  *    After crawling the data, you will end up with the db document
  *      without "description" and its Chinese "name". Please ask CU
  *      team to find people to give the vendor a description and
@@ -108,7 +104,7 @@ rl.on('line', (line) => {
   vendors.push(line)
 });
 
-// delay since yelp does not like too many requests
+// delay requests because yelp does not like too many requests
 let i = 0;
 function crawlWithDelay() {
   setTimeout(() => {

@@ -42,22 +42,28 @@ router.post('/apply',
         })
       }
 
+      let lottery_number = [];
       if (isMember) {
+        const genLotNum = await getNextSequenceValue('antisocialCtr');
         await database.insertOne('antisocial', {
-          lottery_number: await getNextSequenceValue('antisocialCtr'),
+          lottery_number: genLotNum,
           ...body
         });
+        lottery_number.push(genLotNum);
       }
 
+      const genLotNum = await getNextSequenceValue('antisocialCtr');
       await database.insertOne('antisocial', {
-        lottery_number: await getNextSequenceValue('antisocialCtr'),
+        lottery_number: genLotNum,
         ...body
       });
+      lottery_number.push(genLotNum);
 
 
       return res.json({
         is_member: !!isMember,
         applied: false,
+        lottery_number,
         ...isMember
       });
     }

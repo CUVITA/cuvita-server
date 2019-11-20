@@ -33,3 +33,4 @@ app.use('/article', require(`${ process.cwd() }/routers/article`));
 app.use('/school', require(`${ process.cwd() }/routers/school`));
 app.use('/concierge', require(`${ process.cwd() }/routers/concierge`));
 app.use('/user', require(`${ process.cwd() }/routers/user`));
+app.use('/antisocial', require(`${ process.cwd() }/routers/antisocial`));

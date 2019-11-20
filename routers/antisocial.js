@@ -32,10 +32,9 @@ router.post('/apply',
       // check if any of the fields were used before
       const openidApplied = !!await database.findOne('antisocial', {openid: body.openid});
       const emailApplied = !!await database.findOne('antisocial', {email: body.email});
-      const nameApplied = !!await database.findOne('antisocial', {name: body.name});
       const telApplied = !!await database.findOne('antisocial', {tel: body.tel});
 
-      if (openidApplied || emailApplied || nameApplied || telApplied) {
+      if (openidApplied || emailApplied || telApplied) {
         return res.json({
           applied: true,
           error_message: "已注册，请勿重复注册"

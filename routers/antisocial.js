@@ -20,6 +20,20 @@ async function getNextSequenceValue(sequenceName){
   return sequenceDocument.value.sequence_value;
 }
 
+router.get('/member_info', async (req, res) => {
+  const { openid } = req.query;
+  const memberInfo = await database.findOne('members', {openid: openid});
+  if (memberInfo) {
+    return res.json({
+      is_member: !!memberInfo,
+      ...memberInfo
+    })
+  }
+  return res.json({
+    is_member: !!memberInfo
+  })
+});
+
 router.post('/apply',
     [ validator.body(['openid', 'name', 'tel', 'email']).exists(),
       validator.body('name').trim()],
@@ -27,7 +41,7 @@ router.post('/apply',
       if (validator.validationResult(req).errors.length)
         return res.status(400).end();
       let { body } = req;
-      const isMember = await database.findOne('members', {openid: body.openid});
+      const isMember = !!await database.findOne('members', {openid: body.openid});
 
       // check if any of the fields were used before
       const openidApplied = !!await database.findOne('antisocial', {openid: body.openid});
@@ -60,10 +74,8 @@ router.post('/apply',
 
 
       return res.json({
-        is_member: !!isMember,
         applied: false,
         lottery_number,
-        ...isMember
       });
     }
 );
